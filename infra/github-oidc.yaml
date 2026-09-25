@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: GitHub Actions OIDC provider and scoped SageMaker Pipeline role for this fork.
+Description: GitHub Actions OIDC provider and scoped IDS SageMaker Pipeline role for this fork.
 Metadata:
   AWSToolsMetrics:
     AWSAgentToolkit: aws-cloudformation@3
   'com.aws.cloudformation.Context':
-    Purpose: Let the fork prove keyless AWS authentication and manually start its SageMaker Pipeline.
-    Design: Trust only the immutable GitHub subject for master; allow only DescribePipeline and StartPipelineExecution on one pipeline.
+    Purpose: Let the fork prove keyless AWS authentication and manually start its SageMaker Pipelines.
+    Design: Trust only the immutable GitHub subject for master; allow only DescribePipeline and StartPipelineExecution on three named pipelines.
     Operations: The training workflow first performs a read-only check; an explicit workflow input starts billable jobs.
 Resources:
   GithubOidcProvider:
@@ -37,12 +37,15 @@ Resources:
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
-              - Sid: DescribeAndStartOnlyIdsPipeline
+              - Sid: DescribeAndStartOnlyIdsPipelines
                 Effect: Allow
                 Action:
                   - sagemaker:DescribePipeline
                   - sagemaker:StartPipelineExecution
-                Resource: !Sub 'arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:pipeline/bigdata-ids-dev-train'
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:pipeline/bigdata-ids-dev-train'
+                  - !Sub 'arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:pipeline/bigdata-ids-dev-xgboost'
+                  - !Sub 'arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:pipeline/bigdata-ids-dev-lstm'
       Tags:
         - Key: Project
           Value: bigdata-ids-capstone

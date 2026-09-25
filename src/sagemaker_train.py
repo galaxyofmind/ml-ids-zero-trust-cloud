@@ -6,6 +6,8 @@ import argparse
 import json
 import os
 import shutil
+import subprocess
+import sys
 import tarfile
 from pathlib import Path
 
@@ -49,6 +51,15 @@ def main() -> None:
             stratify=y_train,
         )
         x_train, y_train = x_train[selected], y_train[selected]
+
+    if args.model_name == "xgboost":
+        try:
+            import xgboost
+            installed = xgboost.__version__
+        except ImportError:
+            installed = None
+        if installed != "2.1.4":
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "--no-cache-dir", "xgboost-cpu==2.1.4"])
 
     model = MODELS[args.model_name]()
     model.train(x_train, y_train)

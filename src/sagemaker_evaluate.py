@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
+import sys
 import tarfile
 from pathlib import Path
 
@@ -20,14 +22,22 @@ def main() -> None:
     args = parser.parse_args()
 
     with tarfile.open(args.model_tar, "r:gz") as archive:
-        model_file = archive.extractfile("model.pkl")
-        if model_file is None:
-            raise ValueError("model.pkl missing from model artifact")
-        model = joblib.load(model_file)
         metrics_file = archive.extractfile("validation_metrics.json")
         if metrics_file is None:
             raise ValueError("validation_metrics.json missing from model artifact")
         validation = json.load(metrics_file)
+        if validation["model_name"] == "xgboost":
+            try:
+                import xgboost
+                installed = xgboost.__version__
+            except ImportError:
+                installed = None
+            if installed != "2.1.4":
+                subprocess.check_call([sys.executable, "-m", "pip", "install", "--no-cache-dir", "xgboost-cpu==2.1.4"])
+        model_file = archive.extractfile("model.pkl")
+        if model_file is None:
+            raise ValueError("model.pkl missing from model artifact")
+        model = joblib.load(model_file)
 
     x_test = np.load(args.test_dir / "X.npy")
     y_test = np.load(args.test_dir / "y.npy")

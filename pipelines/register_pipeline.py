@@ -32,21 +32,25 @@ from sagemaker.workflow.steps import ProcessingStep, TrainingStep
 PIPELINE_NAME = "bigdata-ids-dev-train"
 PACKAGE_GROUP = "bigdata-ids-dev-classical"
 INFERENCE_SCRIPT = Path(__file__).resolve().parents[1] / "inference" / "ids_inference.py"
-INFERENCE_SETUP = (
-    b"from setuptools import setup\n"
-    b"setup(name='capstone-ids-inference', version='1.0.0', "
-    b"py_modules=['ids_inference'])\n"
-)
 
 
-def inference_code_uri(bucket: str) -> str:
-    digest = hashlib.sha256(INFERENCE_SCRIPT.read_bytes() + INFERENCE_SETUP).hexdigest()
+def inference_setup(model_name: str) -> bytes:
+    requirements = ", install_requires=['xgboost-cpu==2.1.4']" if model_name == "xgboost" else ""
+    return (
+        "from setuptools import setup\n"
+        "setup(name='capstone-ids-inference', version='1.0.0', "
+        f"py_modules=['ids_inference']{requirements})\n"
+    ).encode("utf-8")
+
+
+def inference_code_uri(bucket: str, model_name: str = "random_forest") -> str:
+    digest = hashlib.sha256(INFERENCE_SCRIPT.read_bytes() + inference_setup(model_name)).hexdigest()
     return f"s3://{bucket}/code/inference/ids-inference-{digest}.tar.gz"
 
 
-def upload_inference_code(boto_session: boto3.Session, bucket: str) -> str:
+def upload_inference_code(boto_session: boto3.Session, bucket: str, model_name: str) -> str:
     source = INFERENCE_SCRIPT.read_bytes()
-    uri = inference_code_uri(bucket)
+    uri = inference_code_uri(bucket, model_name)
     key = uri.split(f"s3://{bucket}/", 1)[1]
     s3 = boto_session.client("s3")
     try:
@@ -57,7 +61,7 @@ def upload_inference_code(boto_session: boto3.Session, bucket: str) -> str:
             raise
     buffer = io.BytesIO()
     with tarfile.open(fileobj=buffer, mode="w:gz") as archive:
-        for name, body in (("ids_inference.py", source), ("setup.py", INFERENCE_SETUP)):
+        for name, body in (("ids_inference.py", source), ("setup.py", inference_setup(model_name))):
             info = tarfile.TarInfo(name)
             info.size = len(body)
             info.mode = 0o644
@@ -74,9 +78,11 @@ def stack_outputs(client, name: str) -> dict[str, str]:
 
 
 def build_pipeline(boto_session: boto3.Session, data_bucket: str, artifact_bucket: str,
-                   role_arn: str, compute_mode: str, code_uri: str) -> Pipeline:
+                   role_arn: str, compute_mode: str, code_uri: str,
+                   pipeline_name: str = PIPELINE_NAME, package_group: str = PACKAGE_GROUP) -> Pipeline:
     session = PipelineSession(boto_session=boto_session, default_bucket=artifact_bucket)
-    model_parameter = ParameterString(name="ModelName", default_value="random_forest")
+    default_model = "xgboost" if pipeline_name == "bigdata-ids-dev-xgboost" else "random_forest"
+    model_parameter = ParameterString(name="ModelName", default_value=default_model)
     rows_parameter = ParameterString(name="TrainRows", default_value="30000")
     raw_uri = f"s3://{data_bucket}/raw/dataset=nsl-kdd/version=v1/"
 
@@ -205,7 +211,7 @@ def build_pipeline(boto_session: boto3.Session, data_bucket: str, artifact_bucke
     register = RegisterModel(
         name="RegisterClassicalIDSModel",
         model=model,
-        model_package_group_name=PACKAGE_GROUP,
+        model_package_group_name=package_group,
         content_types=["application/json"],
         response_types=["application/json"],
         inference_instances=["ml.m5.large"],
@@ -223,21 +229,21 @@ def build_pipeline(boto_session: boto3.Session, data_bucket: str, artifact_bucke
         else_steps=[],
     )
     return Pipeline(
-        name=PIPELINE_NAME,
+        name=pipeline_name,
         parameters=[model_parameter, rows_parameter],
         steps=[process_step, train_step, evaluation_step, gate],
         sagemaker_session=session,
     )
 
 
-def ensure_package_group(client) -> None:
+def ensure_package_group(client, package_group: str) -> None:
     try:
-        client.describe_model_package_group(ModelPackageGroupName=PACKAGE_GROUP)
+        client.describe_model_package_group(ModelPackageGroupName=package_group)
     except ClientError as exc:
         if exc.response["Error"]["Code"] != "ValidationException":
             raise
         client.create_model_package_group(
-            ModelPackageGroupName=PACKAGE_GROUP,
+            ModelPackageGroupName=package_group,
             ModelPackageGroupDescription="NSL-KDD classical IDS model candidates",
             Tags=[{"Key": "Project", "Value": "bigdata-ids-capstone"}],
         )
@@ -250,14 +256,20 @@ def main() -> None:
     parser.add_argument("--account-id", default="101728439989")
     parser.add_argument("--allow-root", action="store_true")
     parser.add_argument("--compute-mode", choices=["processing", "training"], default="processing")
-    parser.add_argument("--model-name", choices=["random_forest", "svm"],
+    parser.add_argument("--model-name", choices=["random_forest", "svm", "xgboost"],
                         default="random_forest")
+    parser.add_argument("--pipeline-name")
+    parser.add_argument("--package-group")
     parser.add_argument("--train-rows", type=int, default=30000)
     parser.add_argument("--deploy", action="store_true")
     parser.add_argument("--start", action="store_true")
     args = parser.parse_args()
     if args.start and not args.deploy:
         parser.error("--start requires --deploy")
+    if args.model_name == "xgboost" and args.compute_mode != "processing":
+        parser.error("XGBoost currently uses the Processing fallback while Training quota is zero")
+    pipeline_name = args.pipeline_name or ("bigdata-ids-dev-xgboost" if args.model_name == "xgboost" else PIPELINE_NAME)
+    package_group = args.package_group or ("bigdata-ids-dev-xgboost" if args.model_name == "xgboost" else PACKAGE_GROUP)
 
     os.environ["AWS_SDK_UA_APP_ID"] = "AWSSkill-SageMaker"
     os.environ["SAGEMAKER_SUPPRESS_V2_WARNING"] = "1"
@@ -267,8 +279,8 @@ def main() -> None:
         raise RuntimeError(f"Unexpected AWS identity: {identity['Arn']}")
     cfn = boto_session.client("cloudformation")
     foundation = stack_outputs(cfn, "bigdata-ids-dev-foundation")
-    code_uri = (upload_inference_code(boto_session, foundation["ArtifactBucketName"])
-                if args.deploy else inference_code_uri(foundation["ArtifactBucketName"]))
+    code_uri = (upload_inference_code(boto_session, foundation["ArtifactBucketName"], args.model_name)
+                if args.deploy else inference_code_uri(foundation["ArtifactBucketName"], args.model_name))
     pipeline = build_pipeline(
         boto_session,
         foundation["DataBucketName"],
@@ -276,12 +288,14 @@ def main() -> None:
         foundation["SageMakerRoleArn"],
         args.compute_mode,
         code_uri,
+        pipeline_name,
+        package_group,
     )
     definition = json.loads(pipeline.definition())
-    print(json.dumps({"pipeline": PIPELINE_NAME, "steps": [s["Name"] for s in definition["Steps"]]}))
+    print(json.dumps({"pipeline": pipeline_name, "steps": [s["Name"] for s in definition["Steps"]]}))
     if args.deploy:
         client = boto_session.client("sagemaker")
-        ensure_package_group(client)
+        ensure_package_group(client, package_group)
         result = pipeline.upsert(role_arn=foundation["SageMakerRoleArn"],
                                  tags=[{"Key": "Project", "Value": "bigdata-ids-capstone"}])
         print(json.dumps({"pipeline_arn": result["PipelineArn"]}))

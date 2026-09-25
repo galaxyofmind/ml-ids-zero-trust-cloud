@@ -65,13 +65,22 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--input-dir", type=Path, default=Path("/opt/ml/processing/input"))
     parser.add_argument("--output-dir", type=Path, default=Path("/opt/ml/processing/output"))
+    parser.add_argument("--ordered-split", action="store_true",
+                        help="Preserve NSL-KDD file order for the LSTM sequence experiment")
     args = parser.parse_args()
 
     train_features, train_labels = load_split(args.input_dir / "KDDTrain+.txt")
     test_features, test_labels = load_split(args.input_dir / "KDDTest+.txt")
-    x_train_raw, x_val_raw, y_train, y_val = train_test_split(
-        train_features, train_labels, test_size=0.2, random_state=SEED, stratify=train_labels
-    )
+    if args.ordered_split:
+        cutoff = int(len(train_labels) * 0.8)
+        x_train_raw, x_val_raw = train_features.iloc[:cutoff], train_features.iloc[cutoff:]
+        y_train, y_val = train_labels[:cutoff], train_labels[cutoff:]
+        split_strategy = "ordered 80/20 by file row from KDDTrain+; official KDDTest+ held out"
+    else:
+        x_train_raw, x_val_raw, y_train, y_val = train_test_split(
+            train_features, train_labels, test_size=0.2, random_state=SEED, stratify=train_labels
+        )
+        split_strategy = "stratified 80/20 from KDDTrain+; official KDDTest+ held out"
 
     scaler = MinMaxScaler().fit(x_train_raw[NUMERIC_COLS])
     encoder = OneHotEncoder(handle_unknown="ignore", sparse_output=False, dtype=np.float32).fit(
@@ -116,7 +125,7 @@ def main() -> None:
     report = {
         "dataset_id": "nsl-kdd",
         "dataset_version": "v1",
-        "split_strategy": "stratified 80/20 from KDDTrain+; official KDDTest+ held out",
+        "split_strategy": split_strategy,
         "train_rows": len(y_train),
         "validation_rows": len(y_val),
         "test_rows": len(test_labels),
