@@ -8,7 +8,7 @@ Datasets are **not included** in this repository due to file size. All data is d
 
 | Property | Value |
 |----------|-------|
-| **Records** | 148,517 (training set) |
+| **Records** | 125,973 (`KDDTrain+.txt`; verify the file before each ingest) |
 | **Features** | 41 (post feature selection: **25**) |
 | **Attack Categories** | 4 — DoS, Probe, R2L, U2R |
 | **Normal:Attack Ratio** | 53.46 : 46.54 |
@@ -16,6 +16,8 @@ Datasets are **not included** in this repository due to file size. All data is d
 | **Source** | University of New Brunswick |
 
 ### Download (automatic)
+
+The independent `KDDTest+.txt` split has 22,544 records and is the capstone evaluation set. Fit preprocessing and feature selection on training data only.
 
 ```bash
 python src/preprocess.py

@@ -26,6 +26,7 @@ data/*.npy
 data/*.h5
 data/*.gz
 data/*.zip
+data/*-manifest.json
 
 # Saved models
 results/models/*.pkl

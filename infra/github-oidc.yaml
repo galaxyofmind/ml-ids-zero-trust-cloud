@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: GitHub Actions OIDC provider and read-only identity smoke role for this fork.
+Metadata:
+  AWSToolsMetrics:
+    AWSAgentToolkit: aws-cloudformation@3
+  'com.aws.cloudformation.Context':
+    Purpose: Let the fork prove keyless GitHub Actions authentication to AWS.
+    Design: Trust only the immutable GitHub subject for the master branch; role has no service permissions.
+    Operations: The role currently supports identity smoke testing only. A later deployment role needs scoped permissions.
+Resources:
+  GithubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      Tags:
+        - Key: Project
+          Value: bigdata-ids-capstone
+  GithubSmokeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: GitHub Actions identity smoke test for capstone fork master branch.
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref GithubOidcProvider
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:sub: repo:galaxyofmind@221684358/ml-ids-zero-trust-cloud@1386557472:ref:refs/heads/master
+      Tags:
+        - Key: Project
+          Value: bigdata-ids-capstone
+Outputs:
+  GithubOidcProviderArn:
+    Description: IAM GitHub OIDC provider ARN.
+    Value: !Ref GithubOidcProvider
+  AwsSmokeRoleArn:
+    Description: Use this value for GitHub Actions variable AWS_ROLE_ARN.
+    Value: !GetAtt GithubSmokeRole.Arn

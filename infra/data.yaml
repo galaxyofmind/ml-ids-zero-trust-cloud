@@ -1,0 +1,156 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: NSL-KDD Glue ETL, Data Catalog, Athena workgroup, and optional Firehose demo stream.
+Metadata:
+  AWSToolsMetrics:
+    AWSAgentToolkit: aws-cloudformation@3
+  'com.aws.cloudformation.Context':
+    Purpose: Query real NSL-KDD data in Athena and demonstrate managed batch and streaming ingestion.
+    Design: Glue Spark converts a fixed raw CSV to Parquet; Catalog table points to curated path; Firehose Direct PUT is separate from batch upload.
+    Operations: Run Glue only on demand; each run overwrites the curated v1 path. Firehose has buffering costs and should be deleted after the demo.
+Parameters:
+  DataBucketName:
+    Type: String
+    MinLength: 3
+    Description: Data bucket from the foundation stack.
+  ArtifactBucketName:
+    Type: String
+    MinLength: 3
+    Description: Artifact bucket from the foundation stack.
+  GlueRoleArn:
+    Type: String
+    AllowedPattern: 'arn:aws:iam::[0-9]{12}:role/.+'
+    Description: Glue execution role from the foundation stack.
+  FirehoseRoleArn:
+    Type: String
+    AllowedPattern: 'arn:aws:iam::[0-9]{12}:role/.+'
+    Description: Firehose delivery role from the foundation stack.
+  EnableFirehose:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: Enable only when the AWS account has Firehose service access.
+Conditions:
+  UseFirehose: !Equals [!Ref EnableFirehose, 'true']
+Resources:
+  GlueDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: bigdata_ids_dev
+        Description: Curated IDS datasets for Athena.
+  NslKddTable:
+    Type: AWS::Glue::Table
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref GlueDatabase
+      TableInput:
+        Name: flows_nsl_kdd
+        TableType: EXTERNAL_TABLE
+        Parameters:
+          classification: parquet
+          EXTERNAL: 'TRUE'
+        StorageDescriptor:
+          Location: !Sub 's3://${DataBucketName}/curated/nsl-kdd/v1/'
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Columns:
+            - Name: flow_id
+              Type: string
+            - Name: label
+              Type: string
+            - Name: binary_label
+              Type: string
+            - Name: attack_family
+              Type: string
+            - Name: protocol_type
+              Type: string
+            - Name: service
+              Type: string
+            - Name: flag
+              Type: string
+            - Name: duration
+              Type: string
+            - Name: src_bytes
+              Type: string
+            - Name: dst_bytes
+              Type: string
+            - Name: dataset_id
+              Type: string
+            - Name: dataset_version
+              Type: string
+  NslKddEtlJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub '${AWS::StackName}-nsl-kdd-etl'
+      Description: Validate 125973 NSL-KDD rows and write curated Parquet.
+      Role: !Ref GlueRoleArn
+      GlueVersion: '5.0'
+      WorkerType: G.1X
+      NumberOfWorkers: 2
+      Timeout: 20
+      MaxRetries: 0
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub 's3://${ArtifactBucketName}/code/glue/nsl_kdd_etl.py'
+      DefaultArguments:
+        '--job-language': python
+        '--enable-job-insights': 'true'
+        '--enable-observability-metrics': 'true'
+        '--TempDir': !Sub 's3://${ArtifactBucketName}/glue-temp/'
+        '--RAW_URI': !Sub 's3://${DataBucketName}/raw/dataset=nsl-kdd/version=v1/KDDTrain+.txt'
+        '--CURATED_URI': !Sub 's3://${DataBucketName}/curated/nsl-kdd/v1/'
+      Tags:
+        Project: bigdata-ids-capstone
+  AthenaWorkGroup:
+    Type: AWS::Athena::WorkGroup
+    Properties:
+      Name: !Sub '${AWS::StackName}-athena'
+      State: ENABLED
+      Description: Athena workgroup for the IDS capstone demo.
+      WorkGroupConfiguration:
+        EnforceWorkGroupConfiguration: true
+        PublishCloudWatchMetricsEnabled: true
+        BytesScannedCutoffPerQuery: 1073741824
+        ResultConfiguration:
+          OutputLocation: !Sub 's3://${ArtifactBucketName}/athena-results/'
+      Tags:
+        - Key: Project
+          Value: bigdata-ids-capstone
+  ReplayFirehose:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Condition: UseFirehose
+    Properties:
+      DeliveryStreamName: !Sub '${AWS::StackName}-replay'
+      DeliveryStreamType: DirectPut
+      ExtendedS3DestinationConfiguration:
+        BucketARN: !Sub 'arn:${AWS::Partition}:s3:::${DataBucketName}'
+        RoleARN: !Ref FirehoseRoleArn
+        Prefix: raw/replay/
+        ErrorOutputPrefix: quarantine/replay/!{firehose:error-output-type}/
+        BufferingHints:
+          IntervalInSeconds: 60
+          SizeInMBs: 1
+        CompressionFormat: GZIP
+      Tags:
+        - Key: Project
+          Value: bigdata-ids-capstone
+Outputs:
+  GlueDatabaseName:
+    Description: Athena database containing curated IDS tables.
+    Value: !Ref GlueDatabase
+  NslKddTableName:
+    Description: Athena table for curated NSL-KDD flows.
+    Value: !Ref NslKddTable
+  GlueJobName:
+    Description: On-demand NSL-KDD ETL job.
+    Value: !Ref NslKddEtlJob
+  AthenaWorkGroupName:
+    Description: Workgroup enforcing the query-result S3 location.
+    Value: !Ref AthenaWorkGroup
+  ReplayFirehoseName:
+    Condition: UseFirehose
+    Description: Direct PUT delivery stream for replay demonstration.
+    Value: !Ref ReplayFirehose
