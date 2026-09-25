@@ -13,7 +13,7 @@ This is the current state of the fork in AWS account `101728439989`, Region `ap-
 | Glue | `bigdata-ids-dev-data-nsl-kdd-etl` | Run `jr_c72f74e817958313aaa8ca4a39d3da808648bf7c965baf94163b3756b89c5b96` succeeded |
 | Athena | `bigdata_ids_dev.flows_nsl_kdd` via workgroup `bigdata-ids-dev-data-athena` | Query `d762e729-54c1-4ca9-8725-283203f89420` succeeded |
 | UNSW-NB15 | Glue run `jr_3159af64dd9a9d1da1caf03c404ce26567f8f5656a75005539d1b78c2b5a8076`; Athena `e3cb4685-5268-4df6-8290-1b346102b805` | `flows_unsw_nb15` ready; 175,341 train rows and 10 classes; 59,013 bytes scanned |
-| GitHub auth | CloudFormation `bigdata-ids-dev-github-oidc` | `CREATE_COMPLETE`; immutable fork and `master` branch subject |
+| GitHub auth | CloudFormation `bigdata-ids-dev-github-oidc` | `UPDATE_COMPLETE`; immutable fork/`master` subject; role can only Describe/Start the IDS pipeline |
 | GitHub CI | [run 36097679943](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36097679943) | Success |
 | GitHub AWS smoke | [run 36097779782](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36097779782) | Success; OIDC role assumption |
 | SageMaker Pipeline | `bigdata-ids-dev-train` | RF run `w53s4k21lvg6` and SVM run `bao44h4fqvdk` both `Succeeded` |
@@ -70,6 +70,8 @@ aws service-quotas get-requested-service-quota-change --request-id 8cc761a877774
 ```
 
 To repeat foundation/data setup, use `./scripts/deploy-foundation.ps1 -Profile default -AllowRoot`, `./scripts/ingest-nsl-kdd.ps1 -Profile default -AllowRoot`, `./scripts/ingest-unsw.ps1 -Profile default -AllowRoot`, then `./scripts/deploy-data.ps1 -Profile default -AllowRoot`. Re-running Glue costs money; only start it when needed. To build/start a new SVM pipeline execution, install `sagemaker==2.257.5`, `botocore[crt]`, `scikit-learn==1.4.2`, and run `./.venv/Scripts/python.exe pipelines/register_pipeline.py --profile default --allow-root --compute-mode processing --model-name svm --train-rows 8000 --deploy --start`. Do not rerun merely to inspect the existing execution.
+
+To use GitHub instead of local CLI for the deployed pipeline definition, open **Actions → AWS train (manual) → Run workflow** on `master`. Leave `start_training=false` to verify OIDC and the pipeline without creating compute jobs. Set it to `true` and select RF/SVM only when a new billable Processing run is intended; the workflow uses 30,000 RF or 8,000 SVM training rows. It starts the existing pipeline but does not update the pipeline definition or promote a model package.
 
 After endpoint state is `InService`, smoke test one raw official test row with `./.venv/Scripts/python.exe scripts/smoke-endpoint.py --profile default --allow-root --row-index 0`. To recreate the endpoint from the approved package, run `./.venv/Scripts/python.exe scripts/deploy-endpoint.py --profile default --allow-root --package-arn arn:aws:sagemaker:ap-southeast-1:101728439989:model-package/bigdata-ids-dev-rf/4 --wait`. For a drift demo, run `./scripts/publish-drift.ps1 -Profile default -AllowRoot` and wait for CloudWatch metric/alarm propagation. These actions can incur charges.
 

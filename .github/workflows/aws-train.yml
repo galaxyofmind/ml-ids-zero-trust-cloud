@@ -1,0 +1,55 @@
+name: AWS train (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      start_training:
+        description: Start billable SageMaker Processing jobs after the identity check
+        required: true
+        type: boolean
+        default: false
+      model_name:
+        description: NSL-KDD model to train when start_training is true
+        required: true
+        type: choice
+        options:
+          - random_forest
+          - svm
+        default: random_forest
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  pipeline:
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ap-southeast-1
+      - name: Check AWS identity and pipeline
+        run: |
+          aws sts get-caller-identity
+          aws sagemaker describe-pipeline \
+            --pipeline-name bigdata-ids-dev-train \
+            --query '{Name:PipelineName,Status:PipelineStatus}'
+      - name: Start model training
+        if: inputs.start_training
+        env:
+          MODEL_NAME: ${{ inputs.model_name }}
+        run: |
+          if [ "$MODEL_NAME" = "svm" ]; then
+            train_rows=8000
+          else
+            train_rows=30000
+          fi
+          aws sagemaker start-pipeline-execution \
+            --pipeline-name bigdata-ids-dev-train \
+            --pipeline-parameters \
+              Name=ModelName,Value="$MODEL_NAME" \
+              Name=TrainRows,Value="$train_rows" \
+            --pipeline-execution-display-name "GitHub-${MODEL_NAME}-${GITHUB_RUN_ID}" \
+            --query PipelineExecutionArn

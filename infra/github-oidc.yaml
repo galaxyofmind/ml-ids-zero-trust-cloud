@@ -1,12 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: GitHub Actions OIDC provider and read-only identity smoke role for this fork.
+Description: GitHub Actions OIDC provider and scoped SageMaker Pipeline role for this fork.
 Metadata:
   AWSToolsMetrics:
     AWSAgentToolkit: aws-cloudformation@3
   'com.aws.cloudformation.Context':
-    Purpose: Let the fork prove keyless GitHub Actions authentication to AWS.
-    Design: Trust only the immutable GitHub subject for the master branch; role has no service permissions.
-    Operations: The role currently supports identity smoke testing only. A later deployment role needs scoped permissions.
+    Purpose: Let the fork prove keyless AWS authentication and manually start its SageMaker Pipeline.
+    Design: Trust only the immutable GitHub subject for master; allow only DescribePipeline and StartPipelineExecution on one pipeline.
+    Operations: The training workflow first performs a read-only check; an explicit workflow input starts billable jobs.
 Resources:
   GithubOidcProvider:
     Type: AWS::IAM::OIDCProvider
@@ -20,7 +20,7 @@ Resources:
   GithubSmokeRole:
     Type: AWS::IAM::Role
     Properties:
-      Description: GitHub Actions identity smoke test for capstone fork master branch.
+      Description: GitHub Actions identity check and manually triggered IDS training for fork master.
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -32,6 +32,17 @@ Resources:
               StringEquals:
                 token.actions.githubusercontent.com:aud: sts.amazonaws.com
                 token.actions.githubusercontent.com:sub: repo:galaxyofmind@221684358/ml-ids-zero-trust-cloud@1386557472:ref:refs/heads/master
+      Policies:
+        - PolicyName: StartIdsPipeline
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: DescribeAndStartOnlyIdsPipeline
+                Effect: Allow
+                Action:
+                  - sagemaker:DescribePipeline
+                  - sagemaker:StartPipelineExecution
+                Resource: !Sub 'arn:${AWS::Partition}:sagemaker:${AWS::Region}:${AWS::AccountId}:pipeline/bigdata-ids-dev-train'
       Tags:
         - Key: Project
           Value: bigdata-ids-capstone
@@ -40,5 +51,5 @@ Outputs:
     Description: IAM GitHub OIDC provider ARN.
     Value: !Ref GithubOidcProvider
   AwsSmokeRoleArn:
-    Description: Use this value for GitHub Actions variable AWS_ROLE_ARN.
+    Description: Use this scoped role ARN for GitHub Actions variable AWS_ROLE_ARN.
     Value: !GetAtt GithubSmokeRole.Arn
