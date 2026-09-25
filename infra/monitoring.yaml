@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudWatch PSI alarm for the capstone IDS drift demonstration.
+Metadata:
+  AWSToolsMetrics:
+    AWSAgentToolkit: aws-cloudformation@3
+  'com.aws.cloudformation.Context':
+    Purpose: Show data drift alerting with CloudWatch using the existing PSI calculation.
+    Design: A single alarm watches maximum PSI for NSL-KDD; manual demo publishes stable then shifted windows.
+    Operations: Synthetic shift is a test signal, not evidence of a real intrusion. Missing data does not breach.
+Resources:
+  NslKddPsiAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-nsl-kdd-psi-critical'
+      AlarmDescription: Demo alarm for a feature PSI above 0.25; investigate data and schema.
+      Namespace: Capstone/IDS
+      MetricName: MaxPSI
+      Dimensions:
+        - Name: DatasetId
+          Value: nsl-kdd
+      Statistic: Maximum
+      Period: 300
+      EvaluationPeriods: 1
+      DatapointsToAlarm: 1
+      Threshold: 0.25
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+Outputs:
+  PsiAlarmName:
+    Description: CloudWatch alarm name for the drift demonstration.
+    Value: !Ref NslKddPsiAlarm

@@ -20,6 +20,8 @@ Five model classes — each with train() / predict() / predict_proba() interface
 10-fold stratified cross-validation available for RandomForestIDS and XGBoostIDS.
 """
 
+from __future__ import annotations
+
 import os
 import time
 import logging
@@ -29,7 +31,6 @@ import joblib
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.model_selection import StratifiedKFold, cross_validate
-import xgboost as xgb
 
 logger = logging.getLogger(__name__)
 
@@ -361,6 +362,8 @@ class XGBoostIDS:
     """XGBoost ensemble intrusion detector — paper §5.3."""
 
     def __init__(self, random_state: int = 42):
+        import xgboost as xgb
+
         self.model = xgb.XGBClassifier(
             n_estimators=500,
             learning_rate=0.05,

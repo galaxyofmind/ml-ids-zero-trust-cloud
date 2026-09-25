@@ -32,6 +32,10 @@ $templatePath = Join-Path $repoRoot 'infra/data.yaml'
 aws s3 cp $scriptPath "s3://$($outputs.ArtifactBucketName)/code/glue/nsl_kdd_etl.py" `
     --only-show-errors --profile $Profile --region $Region
 if ($LASTEXITCODE -ne 0) { throw 'Glue script upload failed.' }
+$unswScriptPath = Join-Path $repoRoot 'glue/unsw_etl.py'
+aws s3 cp $unswScriptPath "s3://$($outputs.ArtifactBucketName)/code/glue/unsw_etl.py" `
+    --only-show-errors --profile $Profile --region $Region
+if ($LASTEXITCODE -ne 0) { throw 'UNSW Glue script upload failed.' }
 aws cloudformation validate-template --template-body "file://$templatePath" `
     --profile $Profile --region $Region | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'Data template validation failed.' }

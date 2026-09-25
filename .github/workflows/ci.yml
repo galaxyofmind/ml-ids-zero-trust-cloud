@@ -18,8 +18,8 @@ jobs:
         with:
           python-version: '3.11'
       - name: Check Python syntax
-        run: python -m compileall -q src api dashboard
+        run: python -m compileall -q src api dashboard glue pipelines inference scripts
       - name: Check CloudFormation syntax
         run: |
           python -m pip install 'cfn-lint>=1,<2'
-          cfn-lint infra/foundation.yaml
+          cfn-lint infra/*.yaml

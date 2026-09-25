@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: NSL-KDD Glue ETL, Data Catalog, Athena workgroup, and optional Firehose demo stream.
+Description: NSL-KDD and UNSW-NB15 Glue ETL, Data Catalog, Athena, and optional Firehose demo.
 Metadata:
   AWSToolsMetrics:
     AWSAgentToolkit: aws-cloudformation@3
@@ -104,6 +104,75 @@ Resources:
         '--CURATED_URI': !Sub 's3://${DataBucketName}/curated/nsl-kdd/v1/'
       Tags:
         Project: bigdata-ids-capstone
+  UnswTable:
+    Type: AWS::Glue::Table
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref GlueDatabase
+      TableInput:
+        Name: flows_unsw_nb15
+        TableType: EXTERNAL_TABLE
+        Parameters:
+          classification: parquet
+          EXTERNAL: 'TRUE'
+        StorageDescriptor:
+          Location: !Sub 's3://${DataBucketName}/curated/unsw-nb15/v1/'
+          InputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe
+          Columns:
+            - Name: flow_id
+              Type: string
+            - Name: id
+              Type: string
+            - Name: dur
+              Type: string
+            - Name: proto
+              Type: string
+            - Name: service
+              Type: string
+            - Name: state
+              Type: string
+            - Name: sbytes
+              Type: string
+            - Name: dbytes
+              Type: string
+            - Name: attack_cat
+              Type: string
+            - Name: label
+              Type: string
+            - Name: binary_label
+              Type: string
+            - Name: attack_family
+              Type: string
+            - Name: dataset_id
+              Type: string
+            - Name: dataset_version
+              Type: string
+  UnswEtlJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub '${AWS::StackName}-unsw-nb15-etl'
+      Description: Validate 175341 UNSW-NB15 training rows and write curated Parquet.
+      Role: !Ref GlueRoleArn
+      GlueVersion: '5.0'
+      WorkerType: G.1X
+      NumberOfWorkers: 2
+      Timeout: 20
+      MaxRetries: 0
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub 's3://${ArtifactBucketName}/code/glue/unsw_etl.py'
+      DefaultArguments:
+        '--job-language': python
+        '--enable-job-insights': 'true'
+        '--enable-observability-metrics': 'true'
+        '--TempDir': !Sub 's3://${ArtifactBucketName}/glue-temp/'
+        '--RAW_URI': !Sub 's3://${DataBucketName}/raw/dataset=unsw-nb15/version=v1/UNSW_NB15_training-set.csv'
+        '--CURATED_URI': !Sub 's3://${DataBucketName}/curated/unsw-nb15/v1/'
+      Tags:
+        Project: bigdata-ids-capstone
   AthenaWorkGroup:
     Type: AWS::Athena::WorkGroup
     Properties:
@@ -147,6 +216,12 @@ Outputs:
   GlueJobName:
     Description: On-demand NSL-KDD ETL job.
     Value: !Ref NslKddEtlJob
+  UnswTableName:
+    Description: Athena table for curated UNSW-NB15 training flows.
+    Value: !Ref UnswTable
+  UnswGlueJobName:
+    Description: On-demand UNSW-NB15 ETL job.
+    Value: !Ref UnswEtlJob
   AthenaWorkGroupName:
     Description: Workgroup enforcing the query-result S3 location.
     Value: !Ref AthenaWorkGroup

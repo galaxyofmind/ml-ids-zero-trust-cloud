@@ -1,5 +1,7 @@
 # Machine Learning-Based Intrusion Detection for Cloud Network Security
 
+> **Capstone AWS fork:** The research narrative and high accuracy figures below are inherited from the upstream author; they are **not reproduced capstone measurements**. See [actual AWS deployment status and measured results](docs/aws-deployment-status.md). This fork uses S3, Glue, Athena, SageMaker Pipeline/Model Registry/Serverless Inference, CloudWatch and GitHub Actions OIDC.
+
 ### A Zero Trust Architecture Approach
 
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://python.org)
@@ -12,7 +14,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-Inference-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Docker](https://img.shields.io/badge/Docker-Containerised-2496ED?logo=docker&logoColor=white)](https://docker.com)
 [![Streamlit](https://img.shields.io/badge/Streamlit-Drift%20Dashboard-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io)
-[![ML Pipeline](https://img.shields.io/badge/ML%20Pipeline-CI%2FCD-22c55e?logo=githubactions&logoColor=white)](.github/workflows/ml-pipeline.yml)
+[![Capstone CI](https://img.shields.io/badge/Capstone-CI-22c55e?logo=githubactions&logoColor=white)](.github/workflows/ci.yml)
 
 > **ECCU500: Managing Secure Network Systems** — Course Project | MSc Cybersecurity (Cloud Security Architecture) | EC-Council University | 2026
 

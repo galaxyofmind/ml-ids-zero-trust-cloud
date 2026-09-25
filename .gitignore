@@ -27,6 +27,7 @@ data/*.h5
 data/*.gz
 data/*.zip
 data/*-manifest.json
+data/aws-processed/
 
 # Saved models
 results/models/*.pkl
