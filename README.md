@@ -2,6 +2,8 @@
 
 > **Capstone AWS fork:** The research narrative and high accuracy figures below are inherited from the upstream author; they are **not reproduced capstone measurements**. See [actual AWS deployment status and measured results](docs/aws-deployment-status.md). This fork uses S3, Glue, Athena, SageMaker Pipeline/Model Registry/Serverless Inference, CloudWatch and GitHub Actions OIDC.
 
+**Capstone documentation:** [Developer guide](docs/DEVELOPER_GUIDE.md) · [Operations runbook](docs/OPERATIONS_RUNBOOK.md) · [Deployment report](docs/DEPLOYMENT_REPORT.md).
+
 ### A Zero Trust Architecture Approach
 
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://python.org)
