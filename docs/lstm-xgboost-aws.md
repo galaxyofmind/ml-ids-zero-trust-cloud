@@ -38,7 +38,7 @@ Khi LSTM Pipeline mới `Succeeded`, đăng ký artifact của **execution mới
   --profile default --allow-root --execution-arn <LSTM_PIPELINE_EXECUTION_ARN>
 ```
 
-Script đăng ký tạo package `PendingManualApproval`; xem `evaluation.json` rồi mới duyệt phiên bản muốn dùng. Workflow **AWS train (manual)** trên GitHub có bốn lựa chọn RF/SVM/XGBoost/LSTM. `start_training=false` chỉ kiểm tra OIDC/pipeline; `true` tạo job. Workflow chỉ khởi động pipeline đã có, không tự duyệt package hay cập nhật endpoint.
+Script đăng ký tạo package `PendingManualApproval`; xem `evaluation.json` rồi mới duyệt phiên bản muốn dùng. Workflow **AWS train (manual)** trên GitHub có bốn lựa chọn RF/SVM/XGBoost/LSTM. `start_training=false` chỉ kiểm tra OIDC/pipeline; hai lượt [XGBoost](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36136376488) và [LSTM](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36136379149) đã thành công. `true` tạo job. Workflow chỉ khởi động pipeline đã có, không tự duyệt package hay cập nhật endpoint.
 
 ## Suy luận
 

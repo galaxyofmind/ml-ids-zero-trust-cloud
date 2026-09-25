@@ -14,9 +14,10 @@ This is the current state of the fork in AWS account `101728439989`, Region `ap-
 | Athena | `bigdata_ids_dev.flows_nsl_kdd` via workgroup `bigdata-ids-dev-data-athena` | Query `d762e729-54c1-4ca9-8725-283203f89420` succeeded |
 | UNSW-NB15 | Glue run `jr_3159af64dd9a9d1da1caf03c404ce26567f8f5656a75005539d1b78c2b5a8076`; Athena `e3cb4685-5268-4df6-8290-1b346102b805` | `flows_unsw_nb15` ready; 175,341 train rows and 10 classes; 59,013 bytes scanned |
 | GitHub auth | CloudFormation `bigdata-ids-dev-github-oidc` | `UPDATE_COMPLETE`; immutable fork/`master` subject; role can only Describe/Start the three named IDS pipelines |
-| GitHub CI | [run 36106033991](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36106033991) | Success on the current workflow commit |
+| GitHub CI | [run 36136328787](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36136328787) | Success on XGBoost/LSTM implementation commit `e3f54f9` |
 | GitHub AWS smoke | [run 36097779782](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36097779782) | Success; OIDC role assumption |
 | GitHub training workflow | [read-only run 36106066752](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36106066752), [SVM start run 36126420273](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36126420273) | Both GitHub jobs succeeded; the SVM pipeline execution `c5kl0f3eaypx` also `Succeeded` |
+| GitHub extended dry runs | [XGBoost run 36136376488](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36136376488), [LSTM run 36136379149](https://github.com/galaxyofmind/ml-ids-zero-trust-cloud/actions/runs/36136379149) | Both succeeded with `start_training=false`; no extra Processing jobs |
 | SageMaker Pipeline | `bigdata-ids-dev-train` | RF run `w53s4k21lvg6`, local CLI SVM run `bao44h4fqvdk` and GitHub SVM run `c5kl0f3eaypx` all `Succeeded` |
 | XGBoost Pipeline | `bigdata-ids-dev-xgboost` | CPU-only run `4ixfq9dbl2vq` `Succeeded`; official KDDTest+ F1 `0.770881` |
 | LSTM Pipeline | `bigdata-ids-dev-lstm` | TensorFlow run `yjxa2d63nyic` `Succeeded`; 20-flow file-order window F1 `0.718540` |
