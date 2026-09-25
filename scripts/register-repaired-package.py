@@ -64,6 +64,7 @@ def main() -> None:
                 "Environment": {
                     "SAGEMAKER_PROGRAM": "ids_inference.py",
                     "SAGEMAKER_SUBMIT_DIRECTORY": args.code_uri,
+                    "PYTHONPATH": "/opt/ml/code:/opt/ml/model/code",
                 },
             }],
             "SupportedContentTypes": spec["SupportedContentTypes"],

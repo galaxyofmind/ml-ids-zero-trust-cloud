@@ -32,10 +32,15 @@ from sagemaker.workflow.steps import ProcessingStep, TrainingStep
 PIPELINE_NAME = "bigdata-ids-dev-train"
 PACKAGE_GROUP = "bigdata-ids-dev-classical"
 INFERENCE_SCRIPT = Path(__file__).resolve().parents[1] / "inference" / "ids_inference.py"
+INFERENCE_SETUP = (
+    b"from setuptools import setup\n"
+    b"setup(name='capstone-ids-inference', version='1.0.0', "
+    b"py_modules=['ids_inference'])\n"
+)
 
 
 def inference_code_uri(bucket: str) -> str:
-    digest = hashlib.sha256(INFERENCE_SCRIPT.read_bytes()).hexdigest()
+    digest = hashlib.sha256(INFERENCE_SCRIPT.read_bytes() + INFERENCE_SETUP).hexdigest()
     return f"s3://{bucket}/code/inference/ids-inference-{digest}.tar.gz"
 
 
@@ -52,10 +57,11 @@ def upload_inference_code(boto_session: boto3.Session, bucket: str) -> str:
             raise
     buffer = io.BytesIO()
     with tarfile.open(fileobj=buffer, mode="w:gz") as archive:
-        info = tarfile.TarInfo("ids_inference.py")
-        info.size = len(source)
-        info.mode = 0o644
-        archive.addfile(info, io.BytesIO(source))
+        for name, body in (("ids_inference.py", source), ("setup.py", INFERENCE_SETUP)):
+            info = tarfile.TarInfo(name)
+            info.size = len(body)
+            info.mode = 0o644
+            archive.addfile(info, io.BytesIO(body))
     s3.put_object(
         Bucket=bucket, Key=key, Body=buffer.getvalue(), ServerSideEncryption="AES256"
     )
@@ -192,7 +198,8 @@ def build_pipeline(boto_session: boto3.Session, data_bucket: str, artifact_bucke
         model_data=model_artifact,
         role=role_arn,
         env={"SAGEMAKER_PROGRAM": "ids_inference.py",
-             "SAGEMAKER_SUBMIT_DIRECTORY": code_uri},
+             "SAGEMAKER_SUBMIT_DIRECTORY": code_uri,
+             "PYTHONPATH": "/opt/ml/code:/opt/ml/model/code"},
         sagemaker_session=session,
     )
     register = RegisterModel(
