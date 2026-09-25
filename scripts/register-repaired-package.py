@@ -18,6 +18,8 @@ def main() -> None:
     parser.add_argument("--allow-root", action="store_true")
     parser.add_argument("--source-package-arn", required=True)
     parser.add_argument("--fixed-model-uri", required=True)
+    parser.add_argument("--code-uri", required=True,
+                        help="S3 URI of a tar.gz containing ids_inference.py at its root")
     args = parser.parse_args()
 
     os.environ["AWS_SDK_UA_APP_ID"] = "AWSSkill-SageMaker"
@@ -34,17 +36,25 @@ def main() -> None:
     if location.scheme != "s3" or not location.netloc or not location.path.endswith("/model.tar.gz"):
         parser.error("--fixed-model-uri must be an s3://.../model.tar.gz URI")
     session.client("s3").head_object(Bucket=location.netloc, Key=location.path.lstrip("/"))
+    code_location = urlparse(args.code_uri)
+    if (code_location.scheme != "s3" or not code_location.netloc
+            or not code_location.path.endswith(".tar.gz")):
+        parser.error("--code-uri must be an s3://...tar.gz URI")
+    session.client("s3").head_object(Bucket=code_location.netloc,
+                                     Key=code_location.path.lstrip("/"))
 
     sm = session.client("sagemaker")
     source = sm.describe_model_package(ModelPackageName=args.source_package_arn)
     old_container = source["InferenceSpecification"]["Containers"][0]
-    if old_container["Environment"].get("SAGEMAKER_PROGRAM") != "sagemaker_inference.py":
-        raise RuntimeError("Source package does not have the known entry-point collision")
+    if old_container["Environment"].get("SAGEMAKER_PROGRAM") not in {
+        "sagemaker_inference.py", "ids_inference.py"
+    }:
+        raise RuntimeError("Source package does not have a known inference entry point")
     spec = source["InferenceSpecification"]
     result = sm.create_model_package(
         ModelPackageGroupName=source["ModelPackageGroupName"],
         ModelPackageDescription=(
-            "Corrected inference script name; same trained model and official-test metrics "
+            "Corrected inference code source tar; same trained model and official-test metrics "
             f"as {args.source_package_arn}"
         ),
         InferenceSpecification={
@@ -53,7 +63,7 @@ def main() -> None:
                 "ModelDataUrl": args.fixed_model_uri,
                 "Environment": {
                     "SAGEMAKER_PROGRAM": "ids_inference.py",
-                    "SAGEMAKER_SUBMIT_DIRECTORY": "/opt/ml/model/code",
+                    "SAGEMAKER_SUBMIT_DIRECTORY": args.code_uri,
                 },
             }],
             "SupportedContentTypes": spec["SupportedContentTypes"],
@@ -71,7 +81,7 @@ def main() -> None:
         },
         CustomerMetadataProperties={
             "source_model_package": args.source_package_arn,
-            "repair": "renamed inference entry point to ids_inference.py",
+            "repair": "serve ids_inference.py from a separate source tar",
         },
     )
     print(json.dumps({"model_package_arn": result["ModelPackageArn"]}))

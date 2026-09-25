@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import io
 import json
 import os
 from pathlib import Path
+import tarfile
 
 import boto3
 from botocore.exceptions import ClientError
@@ -28,6 +31,35 @@ from sagemaker.workflow.steps import ProcessingStep, TrainingStep
 
 PIPELINE_NAME = "bigdata-ids-dev-train"
 PACKAGE_GROUP = "bigdata-ids-dev-classical"
+INFERENCE_SCRIPT = Path(__file__).resolve().parents[1] / "inference" / "ids_inference.py"
+
+
+def inference_code_uri(bucket: str) -> str:
+    digest = hashlib.sha256(INFERENCE_SCRIPT.read_bytes()).hexdigest()
+    return f"s3://{bucket}/code/inference/ids-inference-{digest}.tar.gz"
+
+
+def upload_inference_code(boto_session: boto3.Session, bucket: str) -> str:
+    source = INFERENCE_SCRIPT.read_bytes()
+    uri = inference_code_uri(bucket)
+    key = uri.split(f"s3://{bucket}/", 1)[1]
+    s3 = boto_session.client("s3")
+    try:
+        s3.head_object(Bucket=bucket, Key=key)
+        return uri
+    except ClientError as exc:
+        if exc.response["Error"]["Code"] not in {"404", "NoSuchKey"}:
+            raise
+    buffer = io.BytesIO()
+    with tarfile.open(fileobj=buffer, mode="w:gz") as archive:
+        info = tarfile.TarInfo("ids_inference.py")
+        info.size = len(source)
+        info.mode = 0o644
+        archive.addfile(info, io.BytesIO(source))
+    s3.put_object(
+        Bucket=bucket, Key=key, Body=buffer.getvalue(), ServerSideEncryption="AES256"
+    )
+    return uri
 
 
 def stack_outputs(client, name: str) -> dict[str, str]:
@@ -36,7 +68,7 @@ def stack_outputs(client, name: str) -> dict[str, str]:
 
 
 def build_pipeline(boto_session: boto3.Session, data_bucket: str, artifact_bucket: str,
-                   role_arn: str, compute_mode: str) -> Pipeline:
+                   role_arn: str, compute_mode: str, code_uri: str) -> Pipeline:
     session = PipelineSession(boto_session=boto_session, default_bucket=artifact_bucket)
     model_parameter = ParameterString(name="ModelName", default_value="random_forest")
     rows_parameter = ParameterString(name="TrainRows", default_value="30000")
@@ -160,7 +192,7 @@ def build_pipeline(boto_session: boto3.Session, data_bucket: str, artifact_bucke
         model_data=model_artifact,
         role=role_arn,
         env={"SAGEMAKER_PROGRAM": "ids_inference.py",
-             "SAGEMAKER_SUBMIT_DIRECTORY": "/opt/ml/model/code"},
+             "SAGEMAKER_SUBMIT_DIRECTORY": code_uri},
         sagemaker_session=session,
     )
     register = RegisterModel(
@@ -228,12 +260,15 @@ def main() -> None:
         raise RuntimeError(f"Unexpected AWS identity: {identity['Arn']}")
     cfn = boto_session.client("cloudformation")
     foundation = stack_outputs(cfn, "bigdata-ids-dev-foundation")
+    code_uri = (upload_inference_code(boto_session, foundation["ArtifactBucketName"])
+                if args.deploy else inference_code_uri(foundation["ArtifactBucketName"]))
     pipeline = build_pipeline(
         boto_session,
         foundation["DataBucketName"],
         foundation["ArtifactBucketName"],
         foundation["SageMakerRoleArn"],
         args.compute_mode,
+        code_uri,
     )
     definition = json.loads(pipeline.definition())
     print(json.dumps({"pipeline": PIPELINE_NAME, "steps": [s["Name"] for s in definition["Steps"]]}))
