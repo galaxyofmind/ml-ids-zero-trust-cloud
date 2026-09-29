@@ -9,6 +9,9 @@ dist/
 *.egg-info/
 .eggs/
 
+#
+.ua/.trash-*
+
 # Virtual environments
 venv/
 .venv/

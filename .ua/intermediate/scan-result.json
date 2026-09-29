@@ -1,0 +1,474 @@
+{
+  "name": "ml-ids-zero-trust-cloud",
+  "description": "A Python machine learning intrusion detection project for cloud network security using a Zero Trust architecture. This capstone fork integrates an AWS data, training, deployment, and monitoring workflow.",
+  "languages": [
+    "dockerfile",
+    "excalidraw",
+    "ipynb",
+    "json",
+    "markdown",
+    "powershell",
+    "python",
+    "txt",
+    "yaml"
+  ],
+  "frameworks": [
+    "Docker",
+    "FastAPI",
+    "GitHub Actions",
+    "Uvicorn"
+  ],
+  "files": [
+    {
+      "path": ".github/workflows/aws-smoke.yml",
+      "language": "yaml",
+      "sizeLines": 20,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/aws-train.yml",
+      "language": "yaml",
+      "sizeLines": 78,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "sizeLines": 25,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".ua/config.json",
+      "language": "json",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 404,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "api/Dockerfile",
+      "language": "dockerfile",
+      "sizeLines": 27,
+      "fileCategory": "infra"
+    },
+    {
+      "path": "api/serve.py",
+      "language": "python",
+      "sizeLines": 288,
+      "fileCategory": "code"
+    },
+    {
+      "path": "dashboard/drift_app.py",
+      "language": "python",
+      "sizeLines": 366,
+      "fileCategory": "code"
+    },
+    {
+      "path": "data/README.md",
+      "language": "markdown",
+      "sizeLines": 94,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs-personal/BEGINNER_AWS_GITHUB_GUIDE.md",
+      "language": "markdown",
+      "sizeLines": 245,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs-personal/DEPLOYMENT_RUNBOOK.md",
+      "language": "markdown",
+      "sizeLines": 295,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs-personal/Observation-guide.md",
+      "language": "markdown",
+      "sizeLines": 100,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs-personal/SYSTEM_DESIGN.md",
+      "language": "markdown",
+      "sizeLines": 212,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs-personal/git-action-trigger.md",
+      "language": "markdown",
+      "sizeLines": 17,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs-personal/kien-truc-bigdata-mlops-cybersecurity.excalidraw",
+      "language": "excalidraw",
+      "sizeLines": 4410,
+      "fileCategory": "code"
+    },
+    {
+      "path": "docs-personal/manual-run-sample.md",
+      "language": "markdown",
+      "sizeLines": 25,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/DEPLOYMENT_REPORT.md",
+      "language": "markdown",
+      "sizeLines": 76,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/DEVELOPER_GUIDE.md",
+      "language": "markdown",
+      "sizeLines": 116,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/OPERATIONS_RUNBOOK.md",
+      "language": "markdown",
+      "sizeLines": 135,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/ZTA_Framework.md",
+      "language": "markdown",
+      "sizeLines": 315,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/aws-deployment-status.md",
+      "language": "markdown",
+      "sizeLines": 97,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/lstm-xgboost-aws.md",
+      "language": "markdown",
+      "sizeLines": 69,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "docs/research_summary.md",
+      "language": "markdown",
+      "sizeLines": 140,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "glue/nsl_kdd_etl.py",
+      "language": "python",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "glue/unsw_etl.py",
+      "language": "python",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "inference/ids_inference.py",
+      "language": "python",
+      "sizeLines": 56,
+      "fileCategory": "code"
+    },
+    {
+      "path": "infra/data.yaml",
+      "language": "yaml",
+      "sizeLines": 231,
+      "fileCategory": "config"
+    },
+    {
+      "path": "infra/foundation.yaml",
+      "language": "yaml",
+      "sizeLines": 201,
+      "fileCategory": "config"
+    },
+    {
+      "path": "infra/github-oidc.yaml",
+      "language": "yaml",
+      "sizeLines": 58,
+      "fileCategory": "config"
+    },
+    {
+      "path": "infra/monitoring.yaml",
+      "language": "yaml",
+      "sizeLines": 31,
+      "fileCategory": "config"
+    },
+    {
+      "path": "notebooks/01_data_exploration.ipynb",
+      "language": "ipynb",
+      "sizeLines": 231,
+      "fileCategory": "code"
+    },
+    {
+      "path": "notebooks/02_preprocessing.ipynb",
+      "language": "ipynb",
+      "sizeLines": 275,
+      "fileCategory": "code"
+    },
+    {
+      "path": "notebooks/03_model_training.ipynb",
+      "language": "ipynb",
+      "sizeLines": 271,
+      "fileCategory": "code"
+    },
+    {
+      "path": "notebooks/04_model_evaluation.ipynb",
+      "language": "ipynb",
+      "sizeLines": 279,
+      "fileCategory": "code"
+    },
+    {
+      "path": "notebooks/05_zta_framework_viz.ipynb",
+      "language": "ipynb",
+      "sizeLines": 399,
+      "fileCategory": "code"
+    },
+    {
+      "path": "pipelines/register_lstm_pipeline.py",
+      "language": "python",
+      "sizeLines": 118,
+      "fileCategory": "code"
+    },
+    {
+      "path": "pipelines/register_pipeline.py",
+      "language": "python",
+      "sizeLines": 311,
+      "fileCategory": "code"
+    },
+    {
+      "path": "requirements.txt",
+      "language": "txt",
+      "sizeLines": 41,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "scripts/deploy-data.ps1",
+      "language": "powershell",
+      "sizeLines": 64,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/deploy-endpoint.py",
+      "language": "python",
+      "sizeLines": 127,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/deploy-foundation.ps1",
+      "language": "powershell",
+      "sizeLines": 38,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/ingest-nsl-kdd.ps1",
+      "language": "powershell",
+      "sizeLines": 60,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/ingest-unsw.ps1",
+      "language": "powershell",
+      "sizeLines": 52,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/publish-drift.ps1",
+      "language": "powershell",
+      "sizeLines": 41,
+      "fileCategory": "script"
+    },
+    {
+      "path": "scripts/register-lstm-package.py",
+      "language": "python",
+      "sizeLines": 98,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/register-repaired-package.py",
+      "language": "python",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/repair-inference-artifact.py",
+      "language": "python",
+      "sizeLines": 50,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/smoke-endpoint.py",
+      "language": "python",
+      "sizeLines": 68,
+      "fileCategory": "code"
+    },
+    {
+      "path": "scripts/smoke-lstm-endpoint.py",
+      "language": "python",
+      "sizeLines": 93,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/__init__.py",
+      "language": "python",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/aws_drift_demo.py",
+      "language": "python",
+      "sizeLines": 83,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/drift_monitor.py",
+      "language": "python",
+      "sizeLines": 382,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/evaluate.py",
+      "language": "python",
+      "sizeLines": 200,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/models.py",
+      "language": "python",
+      "sizeLines": 480,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/preprocess.py",
+      "language": "python",
+      "sizeLines": 495,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/requirements.txt",
+      "language": "txt",
+      "sizeLines": 1,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "src/sagemaker_evaluate.py",
+      "language": "python",
+      "sizeLines": 67,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/sagemaker_lstm.py",
+      "language": "python",
+      "sizeLines": 135,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/sagemaker_preprocess.py",
+      "language": "python",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/sagemaker_train.py",
+      "language": "python",
+      "sizeLines": 94,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/train_mlflow.py",
+      "language": "python",
+      "sizeLines": 332,
+      "fileCategory": "code"
+    },
+    {
+      "path": "src/visualise.py",
+      "language": "python",
+      "sizeLines": 471,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 62,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "moderate",
+  "importMap": {
+    ".github/workflows/aws-smoke.yml": [],
+    ".github/workflows/aws-train.yml": [],
+    ".github/workflows/ci.yml": [],
+    ".ua/config.json": [],
+    "README.md": [],
+    "api/Dockerfile": [],
+    "api/serve.py": [
+      "src/models.py"
+    ],
+    "dashboard/drift_app.py": [],
+    "data/README.md": [],
+    "docs-personal/BEGINNER_AWS_GITHUB_GUIDE.md": [],
+    "docs-personal/DEPLOYMENT_RUNBOOK.md": [],
+    "docs-personal/Observation-guide.md": [],
+    "docs-personal/SYSTEM_DESIGN.md": [],
+    "docs-personal/git-action-trigger.md": [],
+    "docs-personal/kien-truc-bigdata-mlops-cybersecurity.excalidraw": [],
+    "docs-personal/manual-run-sample.md": [],
+    "docs/DEPLOYMENT_REPORT.md": [],
+    "docs/DEVELOPER_GUIDE.md": [],
+    "docs/OPERATIONS_RUNBOOK.md": [],
+    "docs/ZTA_Framework.md": [],
+    "docs/aws-deployment-status.md": [],
+    "docs/lstm-xgboost-aws.md": [],
+    "docs/research_summary.md": [],
+    "glue/nsl_kdd_etl.py": [],
+    "glue/unsw_etl.py": [],
+    "inference/ids_inference.py": [],
+    "infra/data.yaml": [],
+    "infra/foundation.yaml": [],
+    "infra/github-oidc.yaml": [],
+    "infra/monitoring.yaml": [],
+    "notebooks/01_data_exploration.ipynb": [],
+    "notebooks/02_preprocessing.ipynb": [],
+    "notebooks/03_model_training.ipynb": [],
+    "notebooks/04_model_evaluation.ipynb": [],
+    "notebooks/05_zta_framework_viz.ipynb": [],
+    "pipelines/register_lstm_pipeline.py": [],
+    "pipelines/register_pipeline.py": [],
+    "requirements.txt": [],
+    "scripts/deploy-data.ps1": [],
+    "scripts/deploy-endpoint.py": [],
+    "scripts/deploy-foundation.ps1": [],
+    "scripts/ingest-nsl-kdd.ps1": [],
+    "scripts/ingest-unsw.ps1": [],
+    "scripts/publish-drift.ps1": [],
+    "scripts/register-lstm-package.py": [],
+    "scripts/register-repaired-package.py": [],
+    "scripts/repair-inference-artifact.py": [],
+    "scripts/smoke-endpoint.py": [
+      "src/sagemaker_preprocess.py"
+    ],
+    "scripts/smoke-lstm-endpoint.py": [
+      "src/sagemaker_preprocess.py"
+    ],
+    "src/__init__.py": [],
+    "src/aws_drift_demo.py": [],
+    "src/drift_monitor.py": [],
+    "src/evaluate.py": [],
+    "src/models.py": [],
+    "src/preprocess.py": [],
+    "src/requirements.txt": [],
+    "src/sagemaker_evaluate.py": [],
+    "src/sagemaker_lstm.py": [],
+    "src/sagemaker_preprocess.py": [],
+    "src/sagemaker_train.py": [
+      "src/models.py"
+    ],
+    "src/train_mlflow.py": [
+      "src/evaluate.py",
+      "src/models.py",
+      "src/preprocess.py"
+    ],
+    "src/visualise.py": []
+  }
+}

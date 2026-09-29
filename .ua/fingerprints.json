@@ -1,0 +1,3216 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "e73a22f4c831537e8fd322649d29dca9fb8eb33d",
+  "generatedAt": "2026-09-28T21:10:56.258Z",
+  "files": {
+    ".github/workflows/aws-smoke.yml": {
+      "filePath": ".github/workflows/aws-smoke.yml",
+      "contentHash": "489ae8e5e7c5746004c109baf1675b0c652d5b23ec6a34e70ac1c801bc74e487",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 21,
+      "hasStructuralAnalysis": false
+    },
+    ".github/workflows/aws-train.yml": {
+      "filePath": ".github/workflows/aws-train.yml",
+      "contentHash": "5ad5732e9d0e94fe67b8d6d2065ef38a56aa1ebbba1e711543655a9469dbdf60",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 79,
+      "hasStructuralAnalysis": false
+    },
+    ".github/workflows/ci.yml": {
+      "filePath": ".github/workflows/ci.yml",
+      "contentHash": "6ab2dd133d57d2223b61b3cbe9d8a6b92b7a183f640a7215aaa45cffcba29bd6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": false
+    },
+    ".ua/config.json": {
+      "filePath": ".ua/config.json",
+      "contentHash": "08d37f20ea0af2233ae24f094723759f952381ecb6dd7f2aaa05ef96e95eae6b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": false
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "a7dc659da8fd4247dc579dd8fc9a7100324a3b098c896b3db0373f6afb18b4b9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 405,
+      "hasStructuralAnalysis": false
+    },
+    "api/Dockerfile": {
+      "filePath": "api/Dockerfile",
+      "contentHash": "cab9fc7ab9ddfa040e3bb1583ff5c69c85102569244b6daa31161e574f962e60",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 28,
+      "hasStructuralAnalysis": false
+    },
+    "api/serve.py": {
+      "filePath": "api/serve.py",
+      "contentHash": "c1af91f8de5b06a4bf0bd3a2eff19013122422792fb8e237d6a12e88ef8bb4d0",
+      "functions": [
+        {
+          "name": "load_model",
+          "params": [
+            "name"
+          ],
+          "exported": true,
+          "lineCount": 31
+        },
+        {
+          "name": "health",
+          "params": [],
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "list_models",
+          "params": [],
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "predict_batch",
+          "params": [
+            "req"
+          ],
+          "exported": true,
+          "lineCount": 47
+        },
+        {
+          "name": "predict_single",
+          "params": [
+            "req"
+          ],
+          "exported": true,
+          "lineCount": 24
+        }
+      ],
+      "classes": [
+        {
+          "name": "PredictRequest",
+          "methods": [],
+          "properties": [
+            "features",
+            "model"
+          ],
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "SinglePredictRequest",
+          "methods": [],
+          "properties": [
+            "features",
+            "model"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "PredictionResult",
+          "methods": [],
+          "properties": [
+            "prediction",
+            "confidence",
+            "probabilities",
+            "model_used",
+            "inference_time_ms"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "BatchPredictionResult",
+          "methods": [],
+          "properties": [
+            "predictions",
+            "confidences",
+            "probabilities",
+            "model_used",
+            "n_samples",
+            "inference_time_ms",
+            "attack_rate"
+          ],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "HealthResponse",
+          "methods": [],
+          "properties": [
+            "status",
+            "models_available",
+            "default_model",
+            "n_features_expected",
+            "uptime_seconds"
+          ],
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Optional"
+          ]
+        },
+        {
+          "source": "fastapi",
+          "specifiers": [
+            "FastAPI",
+            "HTTPException"
+          ]
+        },
+        {
+          "source": "fastapi.middleware.cors",
+          "specifiers": [
+            "CORSMiddleware"
+          ]
+        },
+        {
+          "source": "pydantic",
+          "specifiers": [
+            "BaseModel",
+            "Field"
+          ]
+        },
+        {
+          "source": "src.models",
+          "specifiers": [
+            "RandomForestIDS",
+            "SVMIDS",
+            "LSTMIDS",
+            "AutoencoderIDS",
+            "XGBoostIDS",
+            "TIMESTEPS"
+          ]
+        }
+      ],
+      "exports": [
+        "load_model",
+        "PredictRequest",
+        "SinglePredictRequest",
+        "PredictionResult",
+        "BatchPredictionResult",
+        "HealthResponse",
+        "health",
+        "list_models",
+        "predict_batch",
+        "predict_single"
+      ],
+      "totalLines": 289,
+      "hasStructuralAnalysis": true
+    },
+    "dashboard/drift_app.py": {
+      "filePath": "dashboard/drift_app.py",
+      "contentHash": "1e93ac7c28e04c5cfb8575072a9ff97030578ab762966d4898ea7de0a44e3188",
+      "functions": [
+        {
+          "name": "load_reports",
+          "params": [],
+          "returnType": "list[dict]",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "load_summary",
+          "params": [],
+          "returnType": "dict | None",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "status_color",
+          "params": [
+            "status"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "status_emoji",
+          "params": [
+            "status"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 6
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "glob",
+          "specifiers": [
+            "glob"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "pandas",
+          "specifiers": [
+            "pd"
+          ]
+        },
+        {
+          "source": "streamlit",
+          "specifiers": [
+            "st"
+          ]
+        },
+        {
+          "source": "plotly.express",
+          "specifiers": [
+            "px"
+          ]
+        },
+        {
+          "source": "plotly.graph_objects",
+          "specifiers": [
+            "go"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        }
+      ],
+      "exports": [
+        "load_reports",
+        "load_summary",
+        "status_color",
+        "status_emoji"
+      ],
+      "totalLines": 367,
+      "hasStructuralAnalysis": true
+    },
+    "data/README.md": {
+      "filePath": "data/README.md",
+      "contentHash": "4da3ca1b0c98ce5d6236ca9f3a645f314dd70373cf83fba6d75ce4bcc2699cd3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 95,
+      "hasStructuralAnalysis": false
+    },
+    "docs-personal/BEGINNER_AWS_GITHUB_GUIDE.md": {
+      "filePath": "docs-personal/BEGINNER_AWS_GITHUB_GUIDE.md",
+      "contentHash": "8be71a49d8c3dd8d046a7e90f67156bf10cf9e8acc52e935b918fa75e5a59a1a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 246,
+      "hasStructuralAnalysis": false
+    },
+    "docs-personal/DEPLOYMENT_RUNBOOK.md": {
+      "filePath": "docs-personal/DEPLOYMENT_RUNBOOK.md",
+      "contentHash": "7379350c5161cb866192b0850e5c32c8c533868bcc924b28991148288b4215fb",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 296,
+      "hasStructuralAnalysis": false
+    },
+    "docs-personal/Observation-guide.md": {
+      "filePath": "docs-personal/Observation-guide.md",
+      "contentHash": "2dadc4310790b73ee74a691fc63f3b10e94b6477c7e446db118f385340f23775",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 101,
+      "hasStructuralAnalysis": false
+    },
+    "docs-personal/SYSTEM_DESIGN.md": {
+      "filePath": "docs-personal/SYSTEM_DESIGN.md",
+      "contentHash": "c9b41495e8f6c5aa990e0e2406458d5bffa9907dfe659ccffae9c888659971c7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 213,
+      "hasStructuralAnalysis": false
+    },
+    "docs-personal/git-action-trigger.md": {
+      "filePath": "docs-personal/git-action-trigger.md",
+      "contentHash": "123bba0b435225b5b50357a7e72af0bc39ad9c590b9a83657b92b328e5521ae0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": false
+    },
+    "docs-personal/kien-truc-bigdata-mlops-cybersecurity.excalidraw": {
+      "filePath": "docs-personal/kien-truc-bigdata-mlops-cybersecurity.excalidraw",
+      "contentHash": "2d1b83d82a716c2829d9fc7ed79126e9ef23b25b562b55c84c81dcf4c424794d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4411,
+      "hasStructuralAnalysis": false
+    },
+    "docs-personal/manual-run-sample.md": {
+      "filePath": "docs-personal/manual-run-sample.md",
+      "contentHash": "2c73d985132159c55fa80d65f78dca3d2588b1932799cd491421bc9ae1c21e4b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 26,
+      "hasStructuralAnalysis": false
+    },
+    "docs/DEPLOYMENT_REPORT.md": {
+      "filePath": "docs/DEPLOYMENT_REPORT.md",
+      "contentHash": "5831ed602bde0ea1d5b332e3796fb59f194bd537c1ef2bcd6dec7abc211af70a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 77,
+      "hasStructuralAnalysis": false
+    },
+    "docs/DEVELOPER_GUIDE.md": {
+      "filePath": "docs/DEVELOPER_GUIDE.md",
+      "contentHash": "df01f9dfba4c70f4c96432aa091a75e8c728ec3c3ad24c18e7f29019f03b0ca5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 117,
+      "hasStructuralAnalysis": false
+    },
+    "docs/OPERATIONS_RUNBOOK.md": {
+      "filePath": "docs/OPERATIONS_RUNBOOK.md",
+      "contentHash": "1c49cebb0f5c9c8fef864bba0ef45ddd1640fea170dba2d253a5376c9ad83f89",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 136,
+      "hasStructuralAnalysis": false
+    },
+    "docs/ZTA_Framework.md": {
+      "filePath": "docs/ZTA_Framework.md",
+      "contentHash": "3df5e2b76ccfe302870571531b7e9ed76ec4c451450d68ab96f6954f072aa0ee",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 316,
+      "hasStructuralAnalysis": false
+    },
+    "docs/aws-deployment-status.md": {
+      "filePath": "docs/aws-deployment-status.md",
+      "contentHash": "8f1c47d38639ac8d404967c723920c899892ffb3aaedc85914a408be8bb7fbbe",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 98,
+      "hasStructuralAnalysis": false
+    },
+    "docs/lstm-xgboost-aws.md": {
+      "filePath": "docs/lstm-xgboost-aws.md",
+      "contentHash": "dfcee6c13ad33015e36d7eb52a99cca367a9a73c89ea0d1f6cdc0456940c3718",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 70,
+      "hasStructuralAnalysis": false
+    },
+    "docs/research_summary.md": {
+      "filePath": "docs/research_summary.md",
+      "contentHash": "5396a51aad782ed90c49c50f87cb1136b524c22afa6e2c25fc05e86de3746e13",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 141,
+      "hasStructuralAnalysis": false
+    },
+    "glue/nsl_kdd_etl.py": {
+      "filePath": "glue/nsl_kdd_etl.py",
+      "contentHash": "de36c3949d23c3b584b63f86d61695cfa58371405198773936e0d792bf99b404",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 33
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "awsglue.utils",
+          "specifiers": [
+            "getResolvedOptions"
+          ]
+        },
+        {
+          "source": "pyspark.sql",
+          "specifiers": [
+            "SparkSession",
+            "F"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 66,
+      "hasStructuralAnalysis": true
+    },
+    "glue/unsw_etl.py": {
+      "filePath": "glue/unsw_etl.py",
+      "contentHash": "cdb6bd4662af57081c68e3198cc8bb943104fba1e4372413fd18b410ddf48c5d",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 24
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "awsglue.utils",
+          "specifiers": [
+            "getResolvedOptions"
+          ]
+        },
+        {
+          "source": "pyspark.sql",
+          "specifiers": [
+            "SparkSession",
+            "F"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 48,
+      "hasStructuralAnalysis": true
+    },
+    "inference/ids_inference.py": {
+      "filePath": "inference/ids_inference.py",
+      "contentHash": "a575b4ffd6fcd042cc6c1b5faa19216b058a9f0bc91485e39ffcb557da9c4311",
+      "functions": [
+        {
+          "name": "model_fn",
+          "params": [
+            "model_dir"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "input_fn",
+          "params": [
+            "request_body",
+            "content_type"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "predict_fn",
+          "params": [
+            "record",
+            "bundle"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "output_fn",
+          "params": [
+            "prediction",
+            "accept"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "joblib",
+          "specifiers": [
+            "joblib"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "pandas",
+          "specifiers": [
+            "pd"
+          ]
+        }
+      ],
+      "exports": [
+        "model_fn",
+        "input_fn",
+        "predict_fn",
+        "output_fn"
+      ],
+      "totalLines": 57,
+      "hasStructuralAnalysis": true
+    },
+    "infra/data.yaml": {
+      "filePath": "infra/data.yaml",
+      "contentHash": "46c3bed2bcf42317edd07bf33a12b3cdde060535fc6aae87f7c190a8de9f8a8a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 232,
+      "hasStructuralAnalysis": false
+    },
+    "infra/foundation.yaml": {
+      "filePath": "infra/foundation.yaml",
+      "contentHash": "bf70485d72831cde5c4072f70cb8f8ddc2a53f21228a1b86c6a2337c9fee277c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 202,
+      "hasStructuralAnalysis": false
+    },
+    "infra/github-oidc.yaml": {
+      "filePath": "infra/github-oidc.yaml",
+      "contentHash": "8dbab8c809e87c3b045531c009918c24a361bdae18fe9d533a42fe61543664c4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 59,
+      "hasStructuralAnalysis": false
+    },
+    "infra/monitoring.yaml": {
+      "filePath": "infra/monitoring.yaml",
+      "contentHash": "aac1b17fb4c1a4a7a673b876ff94ec67b2fda151bb8cbb9eefc1f0b4dc1b5b95",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 32,
+      "hasStructuralAnalysis": false
+    },
+    "notebooks/01_data_exploration.ipynb": {
+      "filePath": "notebooks/01_data_exploration.ipynb",
+      "contentHash": "393808b30dd9bb9ec70f93e4a3385f8c907cb6eb29e50838bef363143500a4d7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 232,
+      "hasStructuralAnalysis": false
+    },
+    "notebooks/02_preprocessing.ipynb": {
+      "filePath": "notebooks/02_preprocessing.ipynb",
+      "contentHash": "d62f5b77ad315f2aacffa014cc035bd970464c45cb02cc6e39bf687d576d1644",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 276,
+      "hasStructuralAnalysis": false
+    },
+    "notebooks/03_model_training.ipynb": {
+      "filePath": "notebooks/03_model_training.ipynb",
+      "contentHash": "33323f0de72100d2d79d86f9bd1e824ebc800a1d781996f97ea383e3649fb079",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 272,
+      "hasStructuralAnalysis": false
+    },
+    "notebooks/04_model_evaluation.ipynb": {
+      "filePath": "notebooks/04_model_evaluation.ipynb",
+      "contentHash": "4097603a721d96ee0b8f5807ce38c8d432d8bdae4f0410b1a51d3cac5c7b4ac1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 280,
+      "hasStructuralAnalysis": false
+    },
+    "notebooks/05_zta_framework_viz.ipynb": {
+      "filePath": "notebooks/05_zta_framework_viz.ipynb",
+      "contentHash": "245cb02ef52d52bda5fbdf2cf5565059d8745849cdc39d3affff2a2085ec2eb3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 400,
+      "hasStructuralAnalysis": false
+    },
+    "pipelines/register_lstm_pipeline.py": {
+      "filePath": "pipelines/register_lstm_pipeline.py",
+      "contentHash": "2e700082e38754aa59e4fc14c633cbfbfd1a676c9824d86e2b075c1c1a27e594",
+      "functions": [
+        {
+          "name": "stack_outputs",
+          "params": [
+            "client",
+            "name"
+          ],
+          "returnType": "dict[str, str]",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "build_pipeline",
+          "params": [
+            "boto_session",
+            "data_bucket",
+            "artifact_bucket",
+            "role_arn"
+          ],
+          "returnType": "Pipeline",
+          "exported": true,
+          "lineCount": 47
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 38
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "boto3",
+          "specifiers": [
+            "boto3"
+          ]
+        },
+        {
+          "source": "sagemaker.processing",
+          "specifiers": [
+            "ProcessingInput",
+            "ProcessingOutput"
+          ]
+        },
+        {
+          "source": "sagemaker.sklearn.processing",
+          "specifiers": [
+            "SKLearnProcessor"
+          ]
+        },
+        {
+          "source": "sagemaker.tensorflow",
+          "specifiers": [
+            "TensorFlowProcessor"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.pipeline",
+          "specifiers": [
+            "Pipeline"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.pipeline_context",
+          "specifiers": [
+            "PipelineSession"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.parameters",
+          "specifiers": [
+            "ParameterString"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.properties",
+          "specifiers": [
+            "PropertyFile"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.steps",
+          "specifiers": [
+            "ProcessingStep"
+          ]
+        }
+      ],
+      "exports": [
+        "stack_outputs",
+        "build_pipeline",
+        "main"
+      ],
+      "totalLines": 119,
+      "hasStructuralAnalysis": true
+    },
+    "pipelines/register_pipeline.py": {
+      "filePath": "pipelines/register_pipeline.py",
+      "contentHash": "c1f48fae734584776283bf7a665d78dc69232436e0fb19142560667e225261bb",
+      "functions": [
+        {
+          "name": "inference_setup",
+          "params": [
+            "model_name"
+          ],
+          "returnType": "bytes",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "inference_code_uri",
+          "params": [
+            "bucket",
+            "model_name"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "upload_inference_code",
+          "params": [
+            "boto_session",
+            "bucket",
+            "model_name"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 22
+        },
+        {
+          "name": "stack_outputs",
+          "params": [
+            "client",
+            "name"
+          ],
+          "returnType": "dict[str, str]",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "build_pipeline",
+          "params": [
+            "boto_session",
+            "data_bucket",
+            "artifact_bucket",
+            "role_arn",
+            "compute_mode",
+            "code_uri",
+            "pipeline_name",
+            "package_group"
+          ],
+          "returnType": "Pipeline",
+          "exported": true,
+          "lineCount": 157
+        },
+        {
+          "name": "ensure_package_group",
+          "params": [
+            "client",
+            "package_group"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 56
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "hashlib",
+          "specifiers": [
+            "hashlib"
+          ]
+        },
+        {
+          "source": "io",
+          "specifiers": [
+            "io"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "tarfile",
+          "specifiers": [
+            "tarfile"
+          ]
+        },
+        {
+          "source": "boto3",
+          "specifiers": [
+            "boto3"
+          ]
+        },
+        {
+          "source": "botocore.exceptions",
+          "specifiers": [
+            "ClientError"
+          ]
+        },
+        {
+          "source": "sagemaker.inputs",
+          "specifiers": [
+            "TrainingInput"
+          ]
+        },
+        {
+          "source": "sagemaker.model",
+          "specifiers": [
+            "Model"
+          ]
+        },
+        {
+          "source": "sagemaker.model_metrics",
+          "specifiers": [
+            "MetricsSource",
+            "ModelMetrics"
+          ]
+        },
+        {
+          "source": "sagemaker.processing",
+          "specifiers": [
+            "ProcessingInput",
+            "ProcessingOutput"
+          ]
+        },
+        {
+          "source": "sagemaker.sklearn.estimator",
+          "specifiers": [
+            "SKLearn"
+          ]
+        },
+        {
+          "source": "sagemaker.sklearn.processing",
+          "specifiers": [
+            "SKLearnProcessor"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.condition_step",
+          "specifiers": [
+            "ConditionStep"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.conditions",
+          "specifiers": [
+            "ConditionGreaterThanOrEqualTo"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.functions",
+          "specifiers": [
+            "Join",
+            "JsonGet"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.pipeline",
+          "specifiers": [
+            "Pipeline"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.pipeline_context",
+          "specifiers": [
+            "PipelineSession"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.parameters",
+          "specifiers": [
+            "ParameterString"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.properties",
+          "specifiers": [
+            "PropertyFile"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.step_collections",
+          "specifiers": [
+            "RegisterModel"
+          ]
+        },
+        {
+          "source": "sagemaker.workflow.steps",
+          "specifiers": [
+            "ProcessingStep",
+            "TrainingStep"
+          ]
+        }
+      ],
+      "exports": [
+        "inference_setup",
+        "inference_code_uri",
+        "upload_inference_code",
+        "stack_outputs",
+        "build_pipeline",
+        "ensure_package_group",
+        "main"
+      ],
+      "totalLines": 312,
+      "hasStructuralAnalysis": true
+    },
+    "requirements.txt": {
+      "filePath": "requirements.txt",
+      "contentHash": "fe09de06414c9a19ca7bff146a59b3dad3b70fde91d32c98887fdbbc7ab752ae",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 42,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/deploy-data.ps1": {
+      "filePath": "scripts/deploy-data.ps1",
+      "contentHash": "1f413d4b3b0227fd6ec1fae0fc22d86cb8fb92c3953336dcba4fc0472c1fad24",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 65,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/deploy-endpoint.py": {
+      "filePath": "scripts/deploy-endpoint.py",
+      "contentHash": "4711549c6205d9cabcdd6eefccfb12024698563017889e31fb62c67d1838e473",
+      "functions": [
+        {
+          "name": "stack_outputs",
+          "params": [
+            "client",
+            "name"
+          ],
+          "returnType": "dict[str, str]",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "describe_or_none",
+          "params": [
+            "method",
+            "**kwargs"
+          ],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 96
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "boto3",
+          "specifiers": [
+            "boto3"
+          ]
+        },
+        {
+          "source": "botocore.exceptions",
+          "specifiers": [
+            "ClientError"
+          ]
+        }
+      ],
+      "exports": [
+        "stack_outputs",
+        "describe_or_none",
+        "main"
+      ],
+      "totalLines": 128,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/deploy-foundation.ps1": {
+      "filePath": "scripts/deploy-foundation.ps1",
+      "contentHash": "c2ab5d078264210dee40b7f5a21caa04dce30a237c7484c128b222d30787fa26",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 39,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/ingest-nsl-kdd.ps1": {
+      "filePath": "scripts/ingest-nsl-kdd.ps1",
+      "contentHash": "5d9cb019c8e4a62676f049694b5e1220b1e8f955ab4668ea8c04cd9c06ccce0a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 61,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/ingest-unsw.ps1": {
+      "filePath": "scripts/ingest-unsw.ps1",
+      "contentHash": "9f11c9fa0d25c4aa43c6d08e7337fc76b4d75cda49e1855128b7ee6077d1a0aa",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 53,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/publish-drift.ps1": {
+      "filePath": "scripts/publish-drift.ps1",
+      "contentHash": "c113b1d3b7075129b23391ff9b4292c46d06726a93235313c09a89dc68ae45b3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 42,
+      "hasStructuralAnalysis": false
+    },
+    "scripts/register-lstm-package.py": {
+      "filePath": "scripts/register-lstm-package.py",
+      "contentHash": "1f85cb07a9ca97ac2e009a0e2dbe19959d57066658fde93d407d2b4e5ced82b3",
+      "functions": [
+        {
+          "name": "output_uris",
+          "params": [
+            "sm",
+            "execution_arn"
+          ],
+          "returnType": "dict[str, str]",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 67
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "boto3",
+          "specifiers": [
+            "boto3"
+          ]
+        },
+        {
+          "source": "botocore.exceptions",
+          "specifiers": [
+            "ClientError"
+          ]
+        },
+        {
+          "source": "sagemaker",
+          "specifiers": [
+            "image_uris"
+          ]
+        }
+      ],
+      "exports": [
+        "output_uris",
+        "main"
+      ],
+      "totalLines": 99,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/register-repaired-package.py": {
+      "filePath": "scripts/register-repaired-package.py",
+      "contentHash": "b04f94a338256413267d5dd6745e5763fe397f96808936bb9bd5c6816419df62",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 76
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "urllib.parse",
+          "specifiers": [
+            "urlparse"
+          ]
+        },
+        {
+          "source": "boto3",
+          "specifiers": [
+            "boto3"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 93,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/repair-inference-artifact.py": {
+      "filePath": "scripts/repair-inference-artifact.py",
+      "contentHash": "f3634f343a55d6e8e2a5308aaf688283cbe168d56dc27ef277be6aa16211df8b",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 25
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "io",
+          "specifiers": [
+            "io"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "tarfile",
+          "specifiers": [
+            "tarfile"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 51,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/smoke-endpoint.py": {
+      "filePath": "scripts/smoke-endpoint.py",
+      "contentHash": "f8ae6464ee9f861a4096f6e09af3be827155f980867f033a9805a9848093574e",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 47
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "csv",
+          "specifiers": [
+            "csv"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "boto3",
+          "specifiers": [
+            "boto3"
+          ]
+        },
+        {
+          "source": "src.sagemaker_preprocess",
+          "specifiers": [
+            "NSL_KDD_COLUMNS",
+            "NUMERIC_COLS"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 69,
+      "hasStructuralAnalysis": true
+    },
+    "scripts/smoke-lstm-endpoint.py": {
+      "filePath": "scripts/smoke-lstm-endpoint.py",
+      "contentHash": "efab555188d6f756cdc85c8e334b9e91532378f857d8fccae7e50d742d22c01b",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 66
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "csv",
+          "specifiers": [
+            "csv"
+          ]
+        },
+        {
+          "source": "io",
+          "specifiers": [
+            "io"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "tarfile",
+          "specifiers": [
+            "tarfile"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "boto3",
+          "specifiers": [
+            "boto3"
+          ]
+        },
+        {
+          "source": "joblib",
+          "specifiers": [
+            "joblib"
+          ]
+        },
+        {
+          "source": "pandas",
+          "specifiers": [
+            "pd"
+          ]
+        },
+        {
+          "source": "botocore.exceptions",
+          "specifiers": [
+            "ClientError"
+          ]
+        },
+        {
+          "source": "src.sagemaker_preprocess",
+          "specifiers": [
+            "CATEGORICAL_COLS",
+            "NSL_KDD_COLUMNS",
+            "NUMERIC_COLS",
+            "transform"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 94,
+      "hasStructuralAnalysis": true
+    },
+    "src/__init__.py": {
+      "filePath": "src/__init__.py",
+      "contentHash": "a8ad78512bac1b9b8772305b47aa62ac8611d101b2f397094b89d08b47ca19a0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 15,
+      "hasStructuralAnalysis": true
+    },
+    "src/aws_drift_demo.py": {
+      "filePath": "src/aws_drift_demo.py",
+      "contentHash": "b5d4e4f3024f177a1be82b7183f770c99032add9a5afdd98b4aae98c3e9c3993",
+      "functions": [
+        {
+          "name": "psi",
+          "params": [
+            "reference",
+            "current"
+          ],
+          "returnType": "float",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "report",
+          "params": [
+            "reference",
+            "current",
+            "feature_names",
+            "window"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 23
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "joblib",
+          "specifiers": [
+            "joblib"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        }
+      ],
+      "exports": [
+        "psi",
+        "report",
+        "main"
+      ],
+      "totalLines": 84,
+      "hasStructuralAnalysis": true
+    },
+    "src/drift_monitor.py": {
+      "filePath": "src/drift_monitor.py",
+      "contentHash": "dbcc63a04d8cc71a255ac3455be94ac62b20fa0349608975d6734f0e2ff0e8cc",
+      "functions": [
+        {
+          "name": "load_data",
+          "params": [],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "load_feature_names",
+          "params": [],
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "compute_psi",
+          "params": [
+            "expected",
+            "actual",
+            "bins"
+          ],
+          "returnType": "float",
+          "exported": true,
+          "lineCount": 34
+        },
+        {
+          "name": "compute_feature_drift",
+          "params": [
+            "reference",
+            "current",
+            "feature_names"
+          ],
+          "returnType": "pd.DataFrame",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "compute_prediction_drift",
+          "params": [
+            "y_ref_pred",
+            "y_curr_pred"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 26
+        },
+        {
+          "name": "generate_drift_report",
+          "params": [
+            "X_train",
+            "X_current",
+            "y_train",
+            "y_current",
+            "y_train_pred",
+            "y_current_pred",
+            "feature_names",
+            "window_label",
+            "output_dir"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 99
+        },
+        {
+          "name": "simulate_time_windows",
+          "params": [
+            "X_train",
+            "X_test",
+            "y_train",
+            "y_test",
+            "n_windows",
+            "output_dir"
+          ],
+          "returnType": "list[dict]",
+          "exported": true,
+          "lineCount": 73
+        },
+        {
+          "name": "main",
+          "params": [],
+          "exported": true,
+          "lineCount": 46
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "datetime"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "pandas",
+          "specifiers": [
+            "pd"
+          ]
+        }
+      ],
+      "exports": [
+        "load_data",
+        "load_feature_names",
+        "compute_psi",
+        "compute_feature_drift",
+        "compute_prediction_drift",
+        "generate_drift_report",
+        "simulate_time_windows",
+        "main"
+      ],
+      "totalLines": 383,
+      "hasStructuralAnalysis": true
+    },
+    "src/evaluate.py": {
+      "filePath": "src/evaluate.py",
+      "contentHash": "a108202aa4278f258aa04981e83e9ca9f54a8ac5878654cdc6090defbf916466",
+      "functions": [
+        {
+          "name": "compute_fpr",
+          "params": [
+            "y_true",
+            "y_pred"
+          ],
+          "returnType": "float",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "measure_latency",
+          "params": [
+            "predict_fn",
+            "X",
+            "n_repeats"
+          ],
+          "returnType": "float",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "evaluate_model",
+          "params": [
+            "model_name",
+            "y_true",
+            "y_pred",
+            "y_prob",
+            "training_time",
+            "latency_ms"
+          ],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 38
+        },
+        {
+          "name": "evaluate_all",
+          "params": [
+            "results"
+          ],
+          "returnType": "pd.DataFrame",
+          "exported": true,
+          "lineCount": 17
+        },
+        {
+          "name": "compare_models",
+          "params": [
+            "results"
+          ],
+          "returnType": "pd.DataFrame",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "print_comparison_table",
+          "params": [
+            "df"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 20
+        },
+        {
+          "name": "validate_against_paper",
+          "params": [
+            "model_name",
+            "metrics",
+            "tolerance"
+          ],
+          "returnType": "bool",
+          "exported": true,
+          "lineCount": 23
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "pandas",
+          "specifiers": [
+            "pd"
+          ]
+        },
+        {
+          "source": "sklearn.metrics",
+          "specifiers": [
+            "accuracy_score",
+            "precision_score",
+            "recall_score",
+            "f1_score",
+            "confusion_matrix",
+            "roc_auc_score"
+          ]
+        }
+      ],
+      "exports": [
+        "compute_fpr",
+        "measure_latency",
+        "evaluate_model",
+        "evaluate_all",
+        "compare_models",
+        "print_comparison_table",
+        "validate_against_paper"
+      ],
+      "totalLines": 201,
+      "hasStructuralAnalysis": true
+    },
+    "src/models.py": {
+      "filePath": "src/models.py",
+      "contentHash": "043ef3bc299a9cc6d2b8ddaceef07635e99970211e9fbc85fe99399b77942c41",
+      "functions": [
+        {
+          "name": "_keras",
+          "params": [],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "build_random_forest",
+          "params": [
+            "random_state"
+          ],
+          "returnType": "RandomForestClassifier",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "build_svm",
+          "params": [],
+          "returnType": "SVC",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "build_xgboost",
+          "params": [
+            "random_state"
+          ],
+          "returnType": "xgb.XGBClassifier",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "reshape_for_lstm",
+          "params": [
+            "X",
+            "timesteps"
+          ],
+          "returnType": "np.ndarray",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "get_lstm_callbacks",
+          "params": [
+            "patience"
+          ],
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "save_sklearn_model",
+          "params": [
+            "model",
+            "name",
+            "output_dir"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "load_sklearn_model",
+          "params": [
+            "name",
+            "model_dir"
+          ],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "save_keras_model",
+          "params": [
+            "model",
+            "name",
+            "output_dir"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "predict_autoencoder",
+          "params": [
+            "autoencoder",
+            "X",
+            "threshold"
+          ],
+          "returnType": "np.ndarray",
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "classes": [
+        {
+          "name": "RandomForestIDS",
+          "methods": [
+            "__init__",
+            "train",
+            "predict",
+            "predict_proba",
+            "feature_importances_",
+            "cross_validate_10fold",
+            "save",
+            "load"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 56
+        },
+        {
+          "name": "SVMIDS",
+          "methods": [
+            "__init__",
+            "train",
+            "predict",
+            "predict_proba",
+            "save",
+            "load"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 37
+        },
+        {
+          "name": "LSTMIDS",
+          "methods": [
+            "__init__",
+            "_build",
+            "reshape",
+            "train",
+            "predict",
+            "predict_proba",
+            "save",
+            "load"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 100
+        },
+        {
+          "name": "AutoencoderIDS",
+          "methods": [
+            "__init__",
+            "_build",
+            "train",
+            "_errors",
+            "predict",
+            "predict_proba",
+            "save",
+            "load"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 74
+        },
+        {
+          "name": "XGBoostIDS",
+          "methods": [
+            "__init__",
+            "train",
+            "predict",
+            "predict_proba",
+            "feature_importances_",
+            "cross_validate_10fold",
+            "save",
+            "load"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 62
+        }
+      ],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "joblib",
+          "specifiers": [
+            "joblib"
+          ]
+        },
+        {
+          "source": "sklearn.ensemble",
+          "specifiers": [
+            "RandomForestClassifier"
+          ]
+        },
+        {
+          "source": "sklearn.svm",
+          "specifiers": [
+            "SVC"
+          ]
+        },
+        {
+          "source": "sklearn.model_selection",
+          "specifiers": [
+            "StratifiedKFold",
+            "cross_validate"
+          ]
+        }
+      ],
+      "exports": [
+        "_keras",
+        "RandomForestIDS",
+        "SVMIDS",
+        "LSTMIDS",
+        "AutoencoderIDS",
+        "XGBoostIDS",
+        "build_random_forest",
+        "build_svm",
+        "build_xgboost",
+        "reshape_for_lstm",
+        "get_lstm_callbacks",
+        "save_sklearn_model",
+        "load_sklearn_model",
+        "save_keras_model",
+        "predict_autoencoder"
+      ],
+      "totalLines": 481,
+      "hasStructuralAnalysis": true
+    },
+    "src/preprocess.py": {
+      "filePath": "src/preprocess.py",
+      "contentHash": "a2f893d8cf56d24fb0ca5ec51f4d22183159f547e51e82f9596ea17a6c8724bb",
+      "functions": [
+        {
+          "name": "download_nsl_kdd",
+          "params": [
+            "url"
+          ],
+          "returnType": "pd.DataFrame",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "encode_labels",
+          "params": [
+            "df"
+          ],
+          "returnType": "pd.DataFrame",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "encode_labels_mc",
+          "params": [
+            "df"
+          ],
+          "returnType": "np.ndarray",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "one_hot_encode",
+          "params": [
+            "df"
+          ],
+          "returnType": "pd.DataFrame",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "normalise_features",
+          "params": [
+            "X",
+            "scaler",
+            "fit"
+          ],
+          "returnType": "tuple[np.ndarray, MinMaxScaler]",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "apply_smote",
+          "params": [
+            "X",
+            "y",
+            "random_state"
+          ],
+          "returnType": "tuple[np.ndarray, np.ndarray]",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "select_features_rfecv",
+          "params": [
+            "X",
+            "y",
+            "n_features",
+            "cv",
+            "random_state"
+          ],
+          "returnType": "tuple[np.ndarray, RFECV]",
+          "exported": true,
+          "lineCount": 52
+        },
+        {
+          "name": "stratified_split",
+          "params": [
+            "X",
+            "y",
+            "test_size",
+            "random_state"
+          ],
+          "returnType": "tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "save_arrays",
+          "params": [
+            "X_train",
+            "X_test",
+            "y_train",
+            "y_test",
+            "output_dir",
+            "y_train_mc",
+            "y_test_mc"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 25
+        },
+        {
+          "name": "save_artifacts",
+          "params": [
+            "scaler",
+            "selector",
+            "feature_names",
+            "output_dir"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 21
+        },
+        {
+          "name": "run_pipeline",
+          "params": [],
+          "returnType": "dict",
+          "exported": true,
+          "lineCount": 89
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "io",
+          "specifiers": [
+            "io"
+          ]
+        },
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "requests",
+          "specifiers": [
+            "requests"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "pandas",
+          "specifiers": [
+            "pd"
+          ]
+        },
+        {
+          "source": "joblib",
+          "specifiers": [
+            "joblib"
+          ]
+        },
+        {
+          "source": "sklearn.preprocessing",
+          "specifiers": [
+            "MinMaxScaler",
+            "LabelEncoder"
+          ]
+        },
+        {
+          "source": "sklearn.model_selection",
+          "specifiers": [
+            "StratifiedShuffleSplit"
+          ]
+        },
+        {
+          "source": "sklearn.feature_selection",
+          "specifiers": [
+            "RFECV"
+          ]
+        },
+        {
+          "source": "sklearn.ensemble",
+          "specifiers": [
+            "RandomForestClassifier"
+          ]
+        },
+        {
+          "source": "imblearn.over_sampling",
+          "specifiers": [
+            "SMOTE"
+          ]
+        }
+      ],
+      "exports": [
+        "download_nsl_kdd",
+        "encode_labels",
+        "encode_labels_mc",
+        "one_hot_encode",
+        "normalise_features",
+        "apply_smote",
+        "select_features_rfecv",
+        "stratified_split",
+        "save_arrays",
+        "save_artifacts",
+        "run_pipeline"
+      ],
+      "totalLines": 496,
+      "hasStructuralAnalysis": true
+    },
+    "src/requirements.txt": {
+      "filePath": "src/requirements.txt",
+      "contentHash": "3095ea9e58d30ac931354d7a544ed3a4b2aa9c356f8b4604e6c613b645a6f226",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    "src/sagemaker_evaluate.py": {
+      "filePath": "src/sagemaker_evaluate.py",
+      "contentHash": "2b6b63aaedcaa91e6f6155ab7d5cc4e6becfb948a05a0f4a9cf244afa383dabd",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 47
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "tarfile",
+          "specifiers": [
+            "tarfile"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "joblib",
+          "specifiers": [
+            "joblib"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "sklearn.metrics",
+          "specifiers": [
+            "accuracy_score",
+            "confusion_matrix",
+            "f1_score",
+            "precision_score",
+            "recall_score"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 68,
+      "hasStructuralAnalysis": true
+    },
+    "src/sagemaker_lstm.py": {
+      "filePath": "src/sagemaker_lstm.py",
+      "contentHash": "5c23b64508b6b3b173a2951089c85d16041c7e0c309777228dffb24dab0e835e",
+      "functions": [
+        {
+          "name": "make_windows",
+          "params": [
+            "x",
+            "y",
+            "timesteps"
+          ],
+          "returnType": "tuple[np.ndarray, np.ndarray, int]",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "score",
+          "params": [
+            "y",
+            "predicted"
+          ],
+          "returnType": "dict[str, float | dict[str, int]]",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 82
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "tarfile",
+          "specifiers": [
+            "tarfile"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        }
+      ],
+      "exports": [
+        "make_windows",
+        "score",
+        "main"
+      ],
+      "totalLines": 136,
+      "hasStructuralAnalysis": true
+    },
+    "src/sagemaker_preprocess.py": {
+      "filePath": "src/sagemaker_preprocess.py",
+      "contentHash": "b277bb12816e8564a36dfd31ffc202cf17f8ee04bfb9eb8d19b5d840fcc174f8",
+      "functions": [
+        {
+          "name": "load_split",
+          "params": [
+            "path"
+          ],
+          "returnType": "tuple[pd.DataFrame, np.ndarray]",
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "transform",
+          "params": [
+            "features",
+            "scaler",
+            "encoder",
+            "selected_indices"
+          ],
+          "returnType": "np.ndarray",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "save_split",
+          "params": [
+            "path",
+            "x",
+            "y"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 4
+        },
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 73
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "joblib",
+          "specifiers": [
+            "joblib"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "pandas",
+          "specifiers": [
+            "pd"
+          ]
+        },
+        {
+          "source": "sklearn.ensemble",
+          "specifiers": [
+            "RandomForestClassifier"
+          ]
+        },
+        {
+          "source": "sklearn.model_selection",
+          "specifiers": [
+            "train_test_split"
+          ]
+        },
+        {
+          "source": "sklearn.preprocessing",
+          "specifiers": [
+            "MinMaxScaler",
+            "OneHotEncoder"
+          ]
+        }
+      ],
+      "exports": [
+        "load_split",
+        "transform",
+        "save_split",
+        "main"
+      ],
+      "totalLines": 141,
+      "hasStructuralAnalysis": true
+    },
+    "src/sagemaker_train.py": {
+      "filePath": "src/sagemaker_train.py",
+      "contentHash": "08b59bf5c3fbbe8f79c38bab4f381a3325006e2620af6aaa883bdd2d9813a259",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 62
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "shutil",
+          "specifiers": [
+            "shutil"
+          ]
+        },
+        {
+          "source": "subprocess",
+          "specifiers": [
+            "subprocess"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "tarfile",
+          "specifiers": [
+            "tarfile"
+          ]
+        },
+        {
+          "source": "pathlib",
+          "specifiers": [
+            "Path"
+          ]
+        },
+        {
+          "source": "joblib",
+          "specifiers": [
+            "joblib"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "sklearn.metrics",
+          "specifiers": [
+            "accuracy_score",
+            "f1_score"
+          ]
+        },
+        {
+          "source": "sklearn.model_selection",
+          "specifiers": [
+            "train_test_split"
+          ]
+        },
+        {
+          "source": "models",
+          "specifiers": [
+            "RandomForestIDS",
+            "SVMIDS",
+            "XGBoostIDS"
+          ]
+        }
+      ],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 95,
+      "hasStructuralAnalysis": true
+    },
+    "src/train_mlflow.py": {
+      "filePath": "src/train_mlflow.py",
+      "contentHash": "cd5c5268f8ffd0a9dd44e8ebfe1aeb508eb27c42967aa1c40f64b402fc5ecec2",
+      "functions": [
+        {
+          "name": "load_data",
+          "params": [],
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "train_random_forest",
+          "params": [
+            "X_train",
+            "y_train",
+            "X_test",
+            "y_test"
+          ],
+          "exported": true,
+          "lineCount": 42
+        },
+        {
+          "name": "train_svm",
+          "params": [
+            "X_train",
+            "y_train",
+            "X_test",
+            "y_test"
+          ],
+          "exported": true,
+          "lineCount": 32
+        },
+        {
+          "name": "train_lstm",
+          "params": [
+            "X_train",
+            "y_train",
+            "X_test",
+            "y_test"
+          ],
+          "exported": true,
+          "lineCount": 48
+        },
+        {
+          "name": "train_autoencoder",
+          "params": [
+            "X_train",
+            "y_train",
+            "X_test",
+            "y_test"
+          ],
+          "exported": true,
+          "lineCount": 34
+        },
+        {
+          "name": "train_xgboost",
+          "params": [
+            "X_train",
+            "y_train",
+            "X_test",
+            "y_test"
+          ],
+          "exported": true,
+          "lineCount": 41
+        },
+        {
+          "name": "main",
+          "params": [],
+          "exported": true,
+          "lineCount": 40
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "sys",
+          "specifiers": [
+            "sys"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "argparse",
+          "specifiers": [
+            "argparse"
+          ]
+        },
+        {
+          "source": "logging",
+          "specifiers": [
+            "logging"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "mlflow",
+          "specifiers": [
+            "mlflow"
+          ]
+        },
+        {
+          "source": "mlflow.sklearn",
+          "specifiers": [
+            "mlflow.sklearn"
+          ]
+        },
+        {
+          "source": "mlflow.keras",
+          "specifiers": [
+            "mlflow.keras"
+          ]
+        },
+        {
+          "source": "mlflow.xgboost",
+          "specifiers": [
+            "mlflow.xgboost"
+          ]
+        },
+        {
+          "source": "preprocess",
+          "specifiers": [
+            "run_pipeline"
+          ]
+        },
+        {
+          "source": "models",
+          "specifiers": [
+            "RandomForestIDS",
+            "SVMIDS",
+            "LSTMIDS",
+            "AutoencoderIDS",
+            "XGBoostIDS",
+            "TIMESTEPS"
+          ]
+        },
+        {
+          "source": "evaluate",
+          "specifiers": [
+            "compute_all_metrics"
+          ]
+        }
+      ],
+      "exports": [
+        "load_data",
+        "train_random_forest",
+        "train_svm",
+        "train_lstm",
+        "train_autoencoder",
+        "train_xgboost",
+        "main"
+      ],
+      "totalLines": 333,
+      "hasStructuralAnalysis": true
+    },
+    "src/visualise.py": {
+      "filePath": "src/visualise.py",
+      "contentHash": "6e16d68e2664a87cb06df8b63de0c51603c017ba25f85e20547f61dfb8656183",
+      "functions": [
+        {
+          "name": "_save",
+          "params": [
+            "fig",
+            "filename",
+            "dpi"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "fig01_model_comparison",
+          "params": [
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 39
+        },
+        {
+          "name": "fig02_roc_curves",
+          "params": [
+            "roc_data",
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 49
+        },
+        {
+          "name": "fig03_confusion_matrix",
+          "params": [
+            "y_true",
+            "y_pred",
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 42
+        },
+        {
+          "name": "fig04_feature_importance",
+          "params": [
+            "rf_importances",
+            "xgb_importances",
+            "feature_names",
+            "top_n",
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 51
+        },
+        {
+          "name": "fig05_lstm_training_history",
+          "params": [
+            "history",
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 54
+        },
+        {
+          "name": "fig06_latency_vs_accuracy",
+          "params": [
+            "metrics_df",
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 45
+        },
+        {
+          "name": "generate_all_figures",
+          "params": [
+            "roc_data",
+            "lstm_history",
+            "y_true_lstm",
+            "y_pred_lstm",
+            "rf_importances",
+            "xgb_importances",
+            "feature_names",
+            "metrics_df"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 24
+        },
+        {
+          "name": "plot_paper_performance_comparison",
+          "params": [
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "plot_roc_curves",
+          "params": [
+            "roc_data",
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "plot_confusion_matrix",
+          "params": [
+            "y_true",
+            "y_pred",
+            "model_name",
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "plot_feature_importance",
+          "params": [
+            "feature_names",
+            "importances",
+            "top_n",
+            "model_name",
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "plot_zta_pillar_framework",
+          "params": [
+            "save"
+          ],
+          "returnType": "plt.Figure",
+          "exported": true,
+          "lineCount": 40
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "os",
+          "specifiers": [
+            "os"
+          ]
+        },
+        {
+          "source": "numpy",
+          "specifiers": [
+            "np"
+          ]
+        },
+        {
+          "source": "matplotlib.pyplot",
+          "specifiers": [
+            "plt"
+          ]
+        },
+        {
+          "source": "matplotlib.patches",
+          "specifiers": [
+            "mpatches"
+          ]
+        },
+        {
+          "source": "matplotlib.ticker",
+          "specifiers": [
+            "mticker"
+          ]
+        },
+        {
+          "source": "seaborn",
+          "specifiers": [
+            "sns"
+          ]
+        },
+        {
+          "source": "sklearn.metrics",
+          "specifiers": [
+            "confusion_matrix",
+            "roc_curve",
+            "auc"
+          ]
+        }
+      ],
+      "exports": [
+        "_save",
+        "fig01_model_comparison",
+        "fig02_roc_curves",
+        "fig03_confusion_matrix",
+        "fig04_feature_importance",
+        "fig05_lstm_training_history",
+        "fig06_latency_vs_accuracy",
+        "generate_all_figures",
+        "plot_paper_performance_comparison",
+        "plot_roc_curves",
+        "plot_confusion_matrix",
+        "plot_feature_importance",
+        "plot_zta_pillar_framework"
+      ],
+      "totalLines": 472,
+      "hasStructuralAnalysis": true
+    }
+  }
+}
